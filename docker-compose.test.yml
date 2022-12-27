@@ -1,0 +1,34 @@
+version: "2.1"
+services:
+
+  app:
+    network_mode: bridge
+    build: .
+    ports:
+      - "5555:5555"
+    links:
+      - pg
+    tty: true
+    depends_on:
+      pg:
+        condition: service_healthy
+    environment:
+      - DATABASE_URL=postgresql+asyncpg://test:test@pg:5432/test_db
+    volumes:
+      - .:/usr/src/parking
+
+  pg:
+    image: postgres:11.15
+    network_mode: bridge
+    environment:
+      - POSTGRES_PASSWORD=test
+      - POSTGRES_USER=test
+      - POSTGRES_DB=test_db
+      - PGDATA=/var/lib/postgresql/data/pgdata
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U test -d test_db" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5

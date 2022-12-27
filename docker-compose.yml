@@ -1,0 +1,43 @@
+version: "2.1"
+services:
+
+  app:
+    network_mode: bridge
+    build: .
+    ports:
+      - "5555:5555"
+    links:
+      - pg
+    depends_on:
+      pg:
+        condition: service_healthy
+    environment:
+      - DATABASE_URL=postgresql+asyncpg://admin:admin@pg:5432/parking_db
+    command: bash -c "alembic upgrade head && uvicorn app.main:app --host 0.0.0.0 --port 5555 --reload"
+    volumes:
+      - .:/usr/src/parking
+
+  pg:
+    image: postgres:11.15
+    network_mode: bridge
+    environment:
+      - POSTGRES_PASSWORD=admin
+      - POSTGRES_USER=admin
+      - POSTGRES_DB=parking_db
+      - PGDATA=/var/lib/postgresql/data/pgdata
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U admin -d parking_db" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  pgadmin:
+    image: dpage/pgadmin4
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: root
+    ports:
+      - "5050:80"
