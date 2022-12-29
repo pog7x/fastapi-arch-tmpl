@@ -5,42 +5,34 @@ from pydantic import PositiveInt
 from sqlalchemy.future import select
 
 from app import schemas
-from app.models import Client, ClientParking, Parking, session
+from app.models import Client, ClientParking, Parking
+from app.repository.client_repository import ClientRepository
+from app.repository.parking_repository import ParkingRepository
+from app.core.session import session, async_session
 
 router = APIRouter()
+client_repo = ClientRepository(session_maker=async_session)
+parking_repo = ParkingRepository(session_maker=async_session)
 
 
 @router.get("/clients", response_model=List[schemas.ClientModel])
 async def search_clients(name: Optional[str] = None, surname: Optional[str] = None):
-    qs = select(Client)
-    if name:
-        qs = qs.where(Client.name == name)
-    if surname:
-        qs = qs.where(Client.surname == surname)
-    res = await session.execute(qs.order_by(Client.id))
-    return res.scalars().all()
+    return await client_repo.search_clients(name=name, surname=surname)
 
 
-@router.post("/clients")
+@router.post("/clients", response_model=schemas.ClientModel)
 async def create_client(client: schemas.ClientModel) -> Client:
-    new_client = Client(**client.dict())
-    session.add(new_client)
-    await session.commit()
-    return new_client
+    return await client_repo.create_client(create_data=client.dict())
 
 
 @router.get("/clients/{client_id}", response_model=schemas.ClientModel)
-async def get_client(client_id: PositiveInt):
-    res = await session.execute(select(Client).filter_by(id=client_id))
-    return res.scalars().first()
+async def get_client(client_id: PositiveInt) -> Client:
+    return await client_repo.get_client(client_id=client_id)
 
 
-@router.post("/parkings")
+@router.post("/parkings", response_model=schemas.ParkingModel)
 async def create_parking(parking: schemas.ParkingModel) -> Parking:
-    new_parking = Parking(**parking.dict())
-    session.add(new_parking)
-    await session.commit()
-    return new_parking
+    return await parking_repo.create_parking(create_data=parking.dict())
 
 
 @router.post("/client_parking")
