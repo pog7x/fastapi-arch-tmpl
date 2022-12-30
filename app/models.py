@@ -1,8 +1,5 @@
-import os
-
 import sqlalchemy as sa
-from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
-from sqlalchemy.orm import declarative_base, relationship, sessionmaker
+from sqlalchemy.orm import declarative_base, relationship
 
 Base = declarative_base()
 
