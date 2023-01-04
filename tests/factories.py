@@ -1,7 +1,10 @@
 import factory
 from faker import Faker
 
-from app.models import Client, Parking, session
+from app.models import Client, Parking
+from app.core.session import async_session
+
+session = async_session()
 
 rus_faker = Faker(locale="ru_RU")
 

@@ -2,13 +2,10 @@ from fastapi import APIRouter
 from pydantic import PositiveInt, constr
 
 from app import domain
-from app.core.session import async_session
 from app.models import Parking
 from app.repository.parking_repository import ParkingRepository
 
-router = APIRouter(prefix="/parkings")
-
-parking_repo = ParkingRepository(session_maker=async_session)
+router = APIRouter()
 
 
 class APIParkingModel(domain.ParkingModel):
@@ -17,6 +14,6 @@ class APIParkingModel(domain.ParkingModel):
     count_available_places: PositiveInt
 
 
-@router.post("/", response_model=domain.ParkingModel)
+@router.post("/parkings/", response_model=domain.ParkingModel)
 async def create_parking(parking: APIParkingModel) -> Parking:
-    return await parking_repo.create_item(create_data=parking)
+    return await ParkingRepository().create_item(create_data=parking)

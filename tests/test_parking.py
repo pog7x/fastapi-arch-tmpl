@@ -152,7 +152,7 @@ async def test_create_client_parking_ok(client):
 
 @pytest.mark.parking
 @pytest.mark.asyncio
-async def test_create_and_delete_client_parking_flow(client):
+async def test_create_and_delete_client_parking_flow(session, client):
     c = await ClientFactory()
     p = await ParkingFactory()
 

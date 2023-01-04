@@ -1,6 +1,6 @@
 import os
 from functools import wraps
-from typing import Callable
+
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from sqlalchemy.orm import sessionmaker
 
@@ -8,7 +8,6 @@ DATABASE_URL = os.environ.get("DATABASE_URL")
 
 engine = create_async_engine(DATABASE_URL, echo=True, future=True)
 async_session = sessionmaker(engine, expire_on_commit=False, class_=AsyncSession)
-session = async_session()
 
 
 class WithSession:
@@ -16,24 +15,19 @@ class WithSession:
         self._session_maker = session_maker
 
     def __call__(self, func):
-
         @wraps(func)
         async def wrapped(*args, **kwargs):
-            if self.is_async_session(kwargs.get("session")):
-                session = kwargs["session"]
-            else:
-                for a in args:
-                    if self.is_async_session(a):
-                        session = a
-                        break
-                else:
-                    session = self._session_maker()
+            in_kwargs = any(self.is_async_session(kwargv) for kwargv in kwargs.values())
+            in_args = any(self.is_async_session(arg) for arg in args)
 
-            async with session.begin():
+            if in_kwargs or in_args:
+                return await func(*args, **kwargs)
+
+            async with self._session_maker.begin() as session:
                 return await func(*args, **kwargs, session=session)
 
         return wrapped
-    
+
     def is_async_session(self, instance):
         return isinstance(instance, AsyncSession)
 
