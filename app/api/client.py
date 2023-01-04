@@ -18,18 +18,18 @@ class APIClientModel(domain.ClientModel):
     surname: constr(min_length=2, max_length=50)
 
 
-@router.get("/clients/", response_model=List[domain.ClientModel])
+@router.get("", response_model=List[domain.ClientModel])
 async def search_clients(name: Optional[str] = None, surname: Optional[str] = None):
     return await ClientRepository().search_items(
         domain.ClientModel(name=name, surname=surname).dict(exclude_none=True),
     )
 
 
-@router.post("/clients/", response_model=domain.ClientModel)
+@router.post("", response_model=domain.ClientModel)
 async def create_client(client: APIClientModel) -> Client:
     return await ClientRepository().create_item(create_data=client)
 
 
-@router.get("/clients/{client_id}", response_model=domain.ClientModel)
+@router.get("", response_model=domain.ClientModel)
 async def get_client(client_id: PositiveInt) -> Client:
     return await ClientRepository().get_by_id(item_id=client_id)

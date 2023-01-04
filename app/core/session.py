@@ -8,11 +8,12 @@ DATABASE_URL = os.environ.get("DATABASE_URL")
 
 engine = create_async_engine(DATABASE_URL, echo=True, future=True)
 async_session = sessionmaker(engine, expire_on_commit=False, class_=AsyncSession)
+session = async_session()
 
 
 class WithSession:
-    def __init__(self, session_maker: sessionmaker) -> None:
-        self._session_maker = session_maker
+    def __init__(self, _session: AsyncSession) -> None:
+        self._session = _session
 
     def __call__(self, func):
         @wraps(func)
@@ -23,8 +24,16 @@ class WithSession:
             if in_kwargs or in_args:
                 return await func(*args, **kwargs)
 
-            async with self._session_maker.begin() as session:
-                return await func(*args, **kwargs, session=session)
+            try:
+                result = await func(*args, **kwargs, session=self._session)
+                await self._session.commit()
+            except Exception as e:
+                await self._session.rollback()
+                raise e
+
+            await self._session.close()
+
+            return result
 
         return wrapped
 
@@ -32,4 +41,4 @@ class WithSession:
         return isinstance(instance, AsyncSession)
 
 
-with_session = WithSession(session_maker=async_session)
+with_session = WithSession(_session=session)

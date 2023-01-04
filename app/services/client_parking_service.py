@@ -52,10 +52,7 @@ class ClientParkingService:
             # raise HTTPException(status_code=404, detail="available parking is not found")
         res_parking.count_available_places -= 1
 
-        new_client_parking = ClientParking(**client_parking.dict())
-        session.add(new_client_parking)
-
-        return new_client_parking
+        return await ClientParkingRepository().create_item(client_parking)
 
     @with_session
     async def release_parking(
@@ -91,5 +88,4 @@ class ClientParkingService:
         res_parking.count_available_places += 1
         res_client_parking.time_out = client_parking.time_out
 
-        await session.commit()
         return res_client_parking

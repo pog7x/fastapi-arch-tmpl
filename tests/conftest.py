@@ -1,19 +1,16 @@
 import asyncio
-import os
 
 import pytest
 from asgi_lifespan import LifespanManager
 from fastapi import FastAPI
 from httpx import AsyncClient
-from sqlalchemy.ext.asyncio import create_async_engine
 
 
 @pytest.fixture(scope="session", autouse=True)
-async def create_db_engine():
+async def engine():
+    from app.core.session import engine
     from app.models import Base
 
-    test_db_url = os.environ.get("DATABASE_URL")
-    engine = create_async_engine(test_db_url, echo=True, future=True)
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.drop_all)
         await conn.run_sync(Base.metadata.create_all)
