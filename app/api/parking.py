@@ -15,6 +15,6 @@ class APIParkingModel(domain.ParkingModel):
     count_available_places: PositiveInt
 
 
-@router.post("", response_model=domain.ParkingModel)
+@router.post("/", response_model=domain.ParkingModel)
 async def create_parking(parking: APIParkingModel) -> Parking:
     return await ParkingRepository().create_item(create_data=parking)

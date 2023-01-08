@@ -7,8 +7,8 @@ from tests.factories import ClientFactory, ParkingFactory
 @pytest.mark.parametrize(
     "url",
     (
-        "/clients",
-        "/clients?name=Test",
+        "/clients/",
+        "/clients/?name=Test",
     ),
 )
 async def test_get_user_empty_ok(client, url):
@@ -60,7 +60,7 @@ async def test_get_user_empty_ok(client, url):
 )
 async def test_create_client_response_codes(client, body, expected_code):
     resp = await client.post(
-        url="/clients",
+        url="/clients/",
         json=body,
     )
     assert resp.status_code == expected_code
@@ -115,7 +115,7 @@ async def test_create_client_response_codes(client, body, expected_code):
 )
 async def test_create_parking_response_codes(client, body, expected_code):
     resp = await client.post(
-        url="/parkings",
+        url="/parkings/",
         json=body,
     )
     assert resp.status_code == expected_code
@@ -134,7 +134,7 @@ async def test_create_client_parking_ok(client):
 
     p_available_places_before = p.count_available_places
     resp = await client.post(
-        url="/client_parking",
+        url="/client_parking/",
         json={
             "client_id": c.id,
             "parking_id": p.id,
@@ -158,7 +158,7 @@ async def test_create_and_delete_client_parking_flow(client):
 
     p_available_places_before = p.count_available_places
     resp = await client.post(
-        url="/client_parking",
+        url="/client_parking/",
         json={
             "client_id": c.id,
             "parking_id": p.id,
@@ -175,7 +175,7 @@ async def test_create_and_delete_client_parking_flow(client):
     assert resp_body["time_in"] is not None
 
     resp = await client.request(
-        url="/client_parking",
+        url="/client_parking/",
         json={
             "client_id": c.id,
             "parking_id": p.id,
@@ -183,7 +183,7 @@ async def test_create_and_delete_client_parking_flow(client):
         method="DELETE",
     )
     assert resp.status_code == 200
-    # assert p.count_available_places == p_available_places_before
+    assert p.count_available_places == p_available_places_before
 
     resp_body = resp.json()
     assert resp_body["id"] == new_client_parking

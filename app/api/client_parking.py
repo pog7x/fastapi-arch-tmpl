@@ -7,12 +7,12 @@ from app.services.client_parking_service import ClientParkingService
 router = APIRouter()
 
 
-@router.post("")
+@router.post("/")
 async def take_parking(client_parking: domain.TakeClientParkingModel) -> ClientParking:
     return await ClientParkingService().take_parking(client_parking=client_parking)
 
 
-@router.delete("")
+@router.delete("/")
 async def release_parking(
     client_parking: domain.ReleaseClientParkingModel,
 ) -> ClientParking:
