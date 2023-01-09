@@ -1,9 +1,10 @@
 from typing import Any, Dict, List, TypeVar, Union
 
 from pydantic import BaseModel, PositiveInt
+from sqlalchemy import inspect
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
-from sqlalchemy import inspect
+
 from app.core.session import with_session
 from app.models import Base
 
@@ -16,7 +17,9 @@ class BaseRepository:
     model_cls: ModelType
 
     def __init__(self):
-        self._column_attrs = [c.key for c in inspect(self.model_cls).mapper.column_attrs]
+        self._column_attrs = [
+            c.key for c in inspect(self.model_cls).mapper.column_attrs
+        ]
 
     @with_session
     async def search_items(
@@ -45,9 +48,9 @@ class BaseRepository:
     @with_session
     async def create_item(
         self,
-        create_data: BaseModel,
+        create_data: CreateSchemaType,
         session: AsyncSession = None,
-    ) -> Base:
+    ) -> ModelType:
         new_item = self.model_cls(**create_data.dict())
         session.add(new_item)
         return new_item

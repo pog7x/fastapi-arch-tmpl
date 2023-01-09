@@ -31,8 +31,6 @@ class WithSession:
                 await self._session.rollback()
                 raise e
 
-            await self._session.close()
-
             return result
 
         return wrapped
