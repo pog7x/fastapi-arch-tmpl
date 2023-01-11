@@ -12,7 +12,12 @@ services:
       pg:
         condition: service_healthy
     environment:
-      - DATABASE_URL=postgresql+asyncpg://admin:admin@pg:5432/parking_db
+      - PROJECT_NAME=fastapi-arch-tmpl
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=admin
+      - POSTGRES_HOST=pg
+      - POSTGRES_PORT=5432
+      - POSTGRES_DB=parking_db
     command: bash -c "alembic upgrade head && uvicorn app.main:app --host 0.0.0.0 --port 5555 --reload"
     volumes:
       - .:/usr/src/parking
@@ -21,8 +26,8 @@ services:
     image: postgres:11.15
     network_mode: bridge
     environment:
-      - POSTGRES_PASSWORD=admin
       - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=admin
       - POSTGRES_DB=parking_db
       - PGDATA=/var/lib/postgresql/data/pgdata
     ports:

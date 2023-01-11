@@ -13,7 +13,12 @@ services:
       pg:
         condition: service_healthy
     environment:
-      - DATABASE_URL=postgresql+asyncpg://test:test@pg:5432/test_db
+      - PROJECT_NAME=fastapi-arch-tmpl
+      - POSTGRES_USER=test
+      - POSTGRES_PASSWORD=test
+      - POSTGRES_HOST=pg
+      - POSTGRES_PORT=5432
+      - POSTGRES_DB=test_db
     volumes:
       - .:/usr/src/parking
 
@@ -21,8 +26,8 @@ services:
     image: postgres:11.15
     network_mode: bridge
     environment:
-      - POSTGRES_PASSWORD=test
       - POSTGRES_USER=test
+      - POSTGRES_PASSWORD=test
       - POSTGRES_DB=test_db
       - PGDATA=/var/lib/postgresql/data/pgdata
     ports:

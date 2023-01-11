@@ -1,12 +1,11 @@
-import os
 from functools import wraps
 
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from sqlalchemy.orm import sessionmaker
 
-DATABASE_URL = os.environ.get("DATABASE_URL")
+from app.core.config import settings
 
-engine = create_async_engine(DATABASE_URL, echo=True, future=True)
+engine = create_async_engine(settings.POSTGRES_DATABASE_URI, echo=settings.DEBUG, future=True)
 async_session = sessionmaker(engine, expire_on_commit=False, class_=AsyncSession)
 session = async_session()
 
