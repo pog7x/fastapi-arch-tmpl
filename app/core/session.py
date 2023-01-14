@@ -5,7 +5,11 @@ from sqlalchemy.orm import sessionmaker
 
 from app.core.config import settings
 
-engine = create_async_engine(settings.POSTGRES_DATABASE_URI, echo=settings.DEBUG, future=True)
+engine = create_async_engine(
+    settings.POSTGRES_DATABASE_URI,
+    echo=settings.DEBUG,
+    future=True,
+)
 async_session = sessionmaker(engine, expire_on_commit=False, class_=AsyncSession)
 session = async_session()
 

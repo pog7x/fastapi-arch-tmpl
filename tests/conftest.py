@@ -1,4 +1,5 @@
 import asyncio
+from typing import Generator
 
 import pytest
 from asgi_lifespan import LifespanManager
@@ -21,21 +22,15 @@ async def engine():
         await engine.dispose()
 
 
-@pytest.fixture
+@pytest.fixture(scope="session")
 def application() -> FastAPI:
-    from app.main import app
+    from app.main import app_factory
 
-    return app
-
-
-@pytest.fixture
-async def initialized_app(application: FastAPI) -> FastAPI:
-    async with LifespanManager(application):
-        yield application
+    return app_factory()
 
 
-@pytest.fixture
-async def client(application: FastAPI) -> AsyncClient:
+@pytest.fixture(scope="session")
+async def client(application: FastAPI) -> Generator:
     async with LifespanManager(application):
         async with AsyncClient(
             app=application,

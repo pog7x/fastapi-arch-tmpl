@@ -126,7 +126,6 @@ async def test_create_parking_response_codes(client, body, expected_code):
             assert resp_body[field] == body[field]
 
 
-@pytest.mark.parking
 @pytest.mark.asyncio
 async def test_create_client_parking_ok(client):
     c = ClientFactory()
@@ -150,7 +149,6 @@ async def test_create_client_parking_ok(client):
     assert resp_body["time_in"] is not None
 
 
-@pytest.mark.parking
 @pytest.mark.asyncio
 async def test_create_and_delete_client_parking_flow(client):
     c = ClientFactory()

@@ -1,0 +1,62 @@
+[tool.poetry]
+name = "fastapi-arch-tmpl"
+version = "0.0.1"
+description = "fastapi-arch-tmpl"
+authors = ["pog7x <poluningm@gmail.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+asyncpg = "^0.23.0"
+aiohttp = "^3.8.1"
+SQLAlchemy = "^1.4.31"
+fastapi = "^0.70.0"
+uvicorn = "^0.15.0"
+pydantic = "^1.9.0"
+alembic = "^1.9.1"
+httpx = "^0.22.0"
+h11 = "^0.12"
+click = "^8.0.4"
+
+[tool.poetry.dev-dependencies]
+pytest = "^7.1.1"
+pytest-cov = "3.0.0"
+black = "^19.10b0"
+isort = "^4.3.21"
+autoflake = "^1.3.1"
+flake8 = "^3.7.9"
+sqlalchemy-stubs = "^0.3"
+pytest-asyncio = "^0.18.3"
+factory-boy = "^3.2.1"
+Faker = "^13.3.4"
+asgi-lifespan = "^1.0.1"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.pytest.ini_options]
+addopts = "--cov=app --cov-report term-missing -v"
+testpaths = ["tests"]
+markers = ["fast: run tests without extra dependencies"]
+filterwarnings = "ignore::DeprecationWarning"
+asyncio_mode = "auto"
+
+[tool.isort]
+profile = "black"
+multi_line_output = 3
+include_trailing_comma = true
+force_grid_wrap = 0
+use_parentheses = true
+ensure_newline_before_comments = true
+line_length = 88
+skip = ["venv", "migrations"]
+
+[tool.black]
+line-length = 88
+extend-exclude = '''
+/(
+  | venv
+  | migrations
+)/
+'''
+preview = true

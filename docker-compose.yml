@@ -18,9 +18,9 @@ services:
       - POSTGRES_HOST=pg
       - POSTGRES_PORT=5432
       - POSTGRES_DB=parking_db
-    command: bash -c "alembic upgrade head && uvicorn app.main:app --host 0.0.0.0 --port 5555 --reload"
+    command: bash -c "alembic upgrade head && python3 manage.py runserver"
     volumes:
-      - .:/usr/src/parking
+      - .:/app/
 
   pg:
     image: postgres:11.15

@@ -4,10 +4,17 @@ from app.api.routes import router
 from app.core.config import settings
 
 
-def get_application() -> FastAPI:
-    application = FastAPI(title=settings.PROJECT_NAME)
-    application.include_router(router)
-    return application
+class ApplicationFactory:
+    def __call__(self) -> FastAPI:
+        application = FastAPI(
+            title=settings.PROJECT_NAME,
+            debug=settings.DEBUG,
+            root_path=settings.ROOT_URL,
+            openapi_url=settings.OPENAPI_URL,
+            docs_url=None if settings.DISABLE_DOCS else settings.DOCS_URL,
+        )
+        application.include_router(router)
+        return application
 
 
-app = get_application()
+app_factory = ApplicationFactory()

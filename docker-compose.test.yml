@@ -20,7 +20,7 @@ services:
       - POSTGRES_PORT=5432
       - POSTGRES_DB=test_db
     volumes:
-      - .:/usr/src/parking
+      - .:/app/
 
   pg:
     image: postgres:11.15
