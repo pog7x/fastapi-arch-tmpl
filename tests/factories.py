@@ -1,36 +1,46 @@
 import factory
 from faker import Faker
 
-from app.core.session import session
-from app.models import Client, Parking
+from app.core.session import async_session
+from app.models import Item, User
 
 rus_faker = Faker(locale="ru_RU")
 
 
 class CustomFactory(factory.alchemy.SQLAlchemyModelFactory):
     class Meta:
-        sqlalchemy_session = session
+        sqlalchemy_session = async_session()
+        sqlalchemy_session_persistence = 'commit'
+
+    @classmethod
+    def _save(cls, model_class, session, args, kwargs):
+
+        async def create_coro(*a, **kw) -> None:
+            o = model_class(*a, **kw)
+            session.add(o)
+            await session.commit()
+            return o
+
+        return create_coro(*args, **kwargs)
 
 
-class ClientFactory(CustomFactory):
+class UserFactory(CustomFactory):
     class Meta:
-        model = Client
+        model = User
 
-    id = factory.LazyAttribute(lambda _: rus_faker.pyint(min_value=1))
+    id = factory.Sequence(lambda n: n)
     name = rus_faker.first_name()
     surname = rus_faker.last_name()
-    credit_card = rus_faker.credit_card_number()
-    car_number = rus_faker.license_plate()
+    email = rus_faker.email()
+    is_active = True
+    is_superuser = False
 
 
-class ParkingFactory(CustomFactory):
+class ItemFactory(CustomFactory):
     class Meta:
-        model = Parking
+        model = Item
 
-    id = factory.LazyAttribute(lambda _: rus_faker.pyint(min_value=1))
-    address = rus_faker.address()
-    opened = True
-    count_places = rus_faker.pyint(min_value=10, max_value=100, step=1)
-    count_available_places = factory.LazyAttribute(
-        lambda x: rus_faker.pyint(min_value=1, max_value=x.count_places, step=1)
-    )
+    id = factory.Sequence(lambda n: n)
+    title = rus_faker.pystr()
+    description = rus_faker.sentence()
+    owner = factory.SubFactory(UserFactory)
