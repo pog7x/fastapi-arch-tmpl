@@ -1,9 +1,9 @@
-**Running parking app**
+**Running app**
 1. `docker-compose -f docker-compose.yml up -d`
 
-**Testing parking app**
+**Testing app**
 1. `docker-compose -f docker-compose.test.yml up -d`
-2. `docker exec -ti parking_app_1 bash`
+2. `docker exec -ti fastapi-arch-tmpl_app_1 bash`
 3. In docker container console: `pytest -vv`
 
 ## alembic revision

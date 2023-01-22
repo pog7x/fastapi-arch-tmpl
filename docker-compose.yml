@@ -17,7 +17,9 @@ services:
       - POSTGRES_PASSWORD=admin
       - POSTGRES_HOST=pg
       - POSTGRES_PORT=5432
-      - POSTGRES_DB=parking_db
+      - POSTGRES_DB=app_db
+      - AUTO_RELOAD=true
+      - DEBUG=true
     command: bash -c "alembic upgrade head && python3 manage.py runserver"
     volumes:
       - .:/app/
@@ -28,12 +30,12 @@ services:
     environment:
       - POSTGRES_USER=admin
       - POSTGRES_PASSWORD=admin
-      - POSTGRES_DB=parking_db
+      - POSTGRES_DB=app_db
       - PGDATA=/var/lib/postgresql/data/pgdata
     ports:
       - "5432:5432"
     healthcheck:
-      test: [ "CMD-SHELL", "pg_isready -U admin -d parking_db" ]
+      test: [ "CMD-SHELL", "pg_isready -U admin -d app_db" ]
       interval: 5s
       timeout: 5s
       retries: 5
