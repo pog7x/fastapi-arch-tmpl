@@ -11,6 +11,7 @@ class Settings(BaseSettings):
     SERVER_PORT: int = 5555
 
     PROJECT_NAME: str
+    PROJECT_VERSION: str = "0.0.1"
     ROOT_URL: str = ""
     SENTRY_DSN: Optional[HttpUrl] = None
 
