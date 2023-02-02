@@ -11,9 +11,11 @@ from app.core.base_response import BaseResponse
 
 
 async def http_exception_handler(_: Request, exc: HTTPException) -> JSONResponse:
-    headers = getattr(exc, "headers", None)
-    content = BaseResponse.from_error_str(exc.detail).dict()
-    return JSONResponse(content, status_code=exc.status_code, headers=headers)
+    return JSONResponse(
+        BaseResponse.from_error_str(exc.detail).dict(),
+        status_code=exc.status_code,
+        headers=getattr(exc, "headers", None),
+    )
 
 
 async def http_internal_error_handler(*_) -> JSONResponse:
