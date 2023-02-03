@@ -17,9 +17,23 @@ services:
       - POSTGRES_DB=app_db
       - AUTO_RELOAD=true
       - DEBUG=true
+      - RMQ_USER=pog7x
+      - RMQ_PASSWORD=pass
+      - RMQ_HOST=rmq
+      - RMQ_PORT=5672
+      - RMQ_VHOST=/
+      - RMQ_EXCHANGE=publish.consume.coffee.testing.exchange
+      - RMQ_ROUTING_KEY=publish.consume.coffee.testing.key
+      - RMQ_QUEUE=publish.consume.coffee.testing.queue
     command: bash -c "alembic upgrade head && python3 manage.py runserver"
     volumes:
       - .:/app/
+
+  random_coffee:
+    build: random_coffee
+    ports:
+      - "6000:6000"
+    entrypoint: ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "6000"]
 
   pg:
     image: postgres:11.15
@@ -36,6 +50,20 @@ services:
       timeout: 5s
       retries: 5
 
+  rmq:
+    image: rabbitmq:3.11-management-alpine
+    environment:
+      - RABBITMQ_DEFAULT_USER=pog7x
+      - RABBITMQ_DEFAULT_PASS=pass
+    ports:
+      - 35672:15672
+      - 25672:5672
+    healthcheck:
+      test: [ "CMD", "nc", "-z", "localhost", "5672" ]
+      interval: 10s
+      timeout: 10s
+      retries: 5
+
   pgadmin:
     image: dpage/pgadmin4
     environment:
@@ -43,3 +71,21 @@ services:
       PGADMIN_DEFAULT_PASSWORD: root
     ports:
       - "5050:80"
+
+  locust-master:
+    build:
+      context: .
+      dockerfile: Dockerfile.locust
+    ports:
+     - "8089:8089"
+    volumes:
+      - ./:/mnt/locust
+    command: -f /mnt/locust/locustfile.py --master -H http://app:5555
+
+  locust-worker:
+    build:
+      context: .
+      dockerfile: Dockerfile.locust
+    volumes:
+      - ./:/mnt/locust
+    command: -f /mnt/locust/locustfile.py --worker --master-host locust-master
