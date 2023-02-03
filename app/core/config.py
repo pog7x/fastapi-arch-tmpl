@@ -26,6 +26,17 @@ class Settings(BaseSettings):
     POSTGRES_DB: str
     POSTGRES_DATABASE_URI: Optional[PostgresDsn] = None
 
+    RMQ_USER: str
+    RMQ_PASSWORD: str
+    RMQ_HOST: str
+    RMQ_PORT: int
+
+    RMQ_VHOST: str
+
+    RMQ_EXCHANGE: str
+    RMQ_ROUTING_KEY: str
+    RMQ_QUEUE: str
+
     @validator("POSTGRES_DATABASE_URI", pre=True)
     def assemble_db_connection(cls, v: Optional[str], values: Dict[str, Any]) -> Any:
         if isinstance(v, str):
