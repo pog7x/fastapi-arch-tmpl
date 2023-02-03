@@ -1,6 +1,6 @@
 version: "2.1"
-services:
 
+services:
   app:
     network_mode: bridge
     build: .
