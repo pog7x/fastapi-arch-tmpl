@@ -2,7 +2,6 @@ version: "2.1"
 
 services:
   app:
-    network_mode: bridge
     build: .
     ports:
       - "5555:5555"
@@ -24,7 +23,6 @@ services:
 
   pg:
     image: postgres:11.15
-    network_mode: bridge
     environment:
       - POSTGRES_USER=test
       - POSTGRES_PASSWORD=test

@@ -1,7 +1,10 @@
+import http
 from typing import List
 
 from fastapi import APIRouter, Body
 from pydantic import PositiveInt
+from starlette.responses import JSONResponse
+from starlette.status import HTTP_404_NOT_FOUND
 
 from app.core.base_response import BaseResponse
 from app.repository.coffee_repository import CoffeeRepository
@@ -42,5 +45,11 @@ async def delete_coffee(coffee_id: PositiveInt) -> Body:
 @router.put("/{coffee_id}", response_model=BaseResponse[CoffeeModel])
 async def update_coffee(coffee_id: PositiveInt, coffee: CoffeeModel) -> Body:
     item = await CoffeeRepository().get_by_id(item_id=coffee_id)
+    if not item:
+        return JSONResponse(
+            content=BaseResponse.from_error_str(
+                http.HTTPStatus(HTTP_404_NOT_FOUND).phrase
+            ).dict()
+        )
     result = await CoffeeRepository().update_object(db_item=item, update_data=coffee)
     return BaseResponse.from_result(result=result).dict()
