@@ -1,11 +1,15 @@
+import asyncio
+from contextlib import asynccontextmanager
 from logging.config import dictConfig
 
+import aio_pika
 from fastapi import FastAPI
 from fastapi.exceptions import RequestValidationError
 from starlette.exceptions import HTTPException as StarletteHTTPException
 from starlette.status import HTTP_500_INTERNAL_SERVER_ERROR
 from starlette.types import ASGIApp
 
+from app.api.publish_consume_coffee import create_coffee_callback
 from app.api.routes import router
 from app.core.config import settings
 from app.core.exceptions_handlers import (
@@ -14,12 +18,70 @@ from app.core.exceptions_handlers import (
     request_validation_exception_handler,
 )
 from app.core.logger import get_log_config
+from app.rmq.consumer import Exchange2Consume, RMQConsumer
+from app.rmq.publisher import RMQPublisher
+
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    app.state.pub = RMQPublisher(
+        host=settings.RMQ_HOST,
+        port=settings.RMQ_PORT,
+        virtualhost=settings.RMQ_VHOST,
+        login=settings.RMQ_USER,
+        password=settings.RMQ_PASSWORD,
+        exchange_name=settings.RMQ_EXCHANGE,
+        exchange_type=aio_pika.ExchangeType.TOPIC,
+    )
+
+    await app.state.pub.start()
+
+    app.state.sub = RMQConsumer(
+        host=settings.RMQ_HOST,
+        port=settings.RMQ_PORT,
+        virtualhost=settings.RMQ_VHOST,
+        login=settings.RMQ_USER,
+        password=settings.RMQ_PASSWORD,
+        exchanges=[
+            Exchange2Consume(
+                exchange=settings.RMQ_EXCHANGE,
+                routing_key=settings.RMQ_ROUTING_KEY,
+            ),
+        ],
+        queue_name=settings.RMQ_QUEUE,
+        callback=create_coffee_callback,
+        consumer_tag=settings.PROJECT_NAME,
+    )
+
+    asyncio.create_task(app.state.sub.start())
+
+    yield
+
+    await app.state.pub.stop()
+    await app.state.sub.stop()
+
+
+def connect_rmq(app: FastAPI):
+    async def start() -> None:
+        await app.state.pub.start()
+        asyncio.create_task(app.state.sub.start())
+
+    return start
+
+
+def disconnect_rmq(app: FastAPI):
+    async def stop() -> None:
+        await app.state.pub.stop()
+        await app.state.sub.stop()
+
+    return stop
 
 
 class ApplicationFactory:
     def __call__(self) -> ASGIApp:
         dictConfig(get_log_config(settings.DEBUG))
         application = FastAPI(
+            lifespan=lifespan,
             title=settings.PROJECT_NAME,
             version=settings.PROJECT_VERSION,
             debug=settings.DEBUG,
@@ -29,6 +91,7 @@ class ApplicationFactory:
         )
         application.include_router(router)
         self._init_exception_handlers(app=application)
+
         return application
 
     @staticmethod

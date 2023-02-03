@@ -1,0 +1,13 @@
+FROM locustio/locust:2.28.0
+
+WORKDIR /mnt/locust
+
+RUN pip3 install \
+    Faker==33.1.0 \
+    factory-boy==3.3.1 \
+    polyfactory==2.18.1 \
+    sqlalchemy==2.0.36 \
+    pydantic==2.10.3 \
+    sqlmodel==0.0.22
+
+COPY . .
