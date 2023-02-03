@@ -25,6 +25,15 @@ class Settings(BaseSettings):
     POSTGRES_DB: str
     POSTGRES_DATABASE_URI: str | None = None
 
+    RMQ_USER: str
+    RMQ_PASSWORD: str
+    RMQ_HOST: str
+    RMQ_PORT: int
+    RMQ_VHOST: str
+    RMQ_EXCHANGE: str
+    RMQ_ROUTING_KEY: str
+    RMQ_QUEUE: str
+
     @field_validator("POSTGRES_DATABASE_URI", mode="before")
     def assemble_db_connection(cls, v: str | None, info: ValidationInfo) -> str:
         if isinstance(v, str):
