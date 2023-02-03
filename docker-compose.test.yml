@@ -16,6 +16,14 @@ services:
       - POSTGRES_HOST=pg
       - POSTGRES_PORT=5432
       - POSTGRES_DB=test_db
+      - RMQ_USER=pog7x
+      - RMQ_PASSWORD=pass
+      - RMQ_HOST=rmq
+      - RMQ_PORT=5672
+      - RMQ_VHOST=/
+      - RMQ_EXCHANGE=publish.consume.coffee.testing.exchange
+      - RMQ_ROUTING_KEY=publish.consume.coffee.testing.key
+      - RMQ_QUEUE=publish.consume.coffee.testing.queue
     volumes:
       - .:/app/
 
