@@ -46,3 +46,21 @@ services:
       PGADMIN_DEFAULT_PASSWORD: root
     ports:
       - "5050:80"
+
+  locust-master:
+    build:
+      context: .
+      dockerfile: Dockerfile.locust
+    ports:
+     - "8089:8089"
+    volumes:
+      - ./:/mnt/locust
+    command: -f /mnt/locust/locustfile.py --master -H http://app:5555
+
+  locust-worker:
+    build:
+      context: .
+      dockerfile: Dockerfile.locust
+    volumes:
+      - ./:/mnt/locust
+    command: -f /mnt/locust/locustfile.py --worker --master-host locust-master

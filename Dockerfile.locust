@@ -1,0 +1,7 @@
+FROM locustio/locust
+
+WORKDIR /mnt/locust
+
+RUN pip3 install Faker factory-boy pydantic-factories sqlalchemy
+
+COPY . .
