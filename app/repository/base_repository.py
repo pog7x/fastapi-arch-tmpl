@@ -1,6 +1,6 @@
 from typing import Any, Container, Dict, List, Optional, TypeVar, Union
 
-from pydantic import BaseModel, PositiveInt
+from pydantic import BaseModel, NonNegativeInt, PositiveInt
 from sqlalchemy import inspect
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
@@ -26,8 +26,10 @@ class BaseRepository:
     async def search_objects(
         self,
         search_data: Dict,
-        session: Optional[AsyncSession] = None,
+        limit: PositiveInt = 20,
+        offset: NonNegativeInt = 0,
         join_related: Container[str] = [],
+        session: Optional[AsyncSession] = None,
     ) -> List[ModelType]:
         qs = select(self.model_cls)
 
@@ -39,7 +41,9 @@ class BaseRepository:
             if jr in self._relationships:
                 qs = qs.options(joinedload(getattr(self.model_cls, jr)))
 
-        res = await session.execute(qs.order_by(self.model_cls.id))
+        res = await session.execute(
+            qs.order_by(self.model_cls.id).limit(limit).offset(offset)
+        )
 
         if join_related:
             return res.scalars().unique().all()
@@ -49,8 +53,8 @@ class BaseRepository:
     async def get_by_id(
         self,
         item_id: PositiveInt,
-        session: Optional[AsyncSession] = None,
         join_related: Container[str] = [],
+        session: Optional[AsyncSession] = None,
     ) -> ModelType:
         qs = select(self.model_cls).filter_by(id=item_id)
 
