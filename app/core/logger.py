@@ -31,7 +31,7 @@ def get_log_config(debug: bool) -> Dict:
             },
             "sqlalchemy": {
                 "handlers": ["json"],
-                "level": "DEBUG",
+                "level": "INFO" if debug else "ERROR",
                 "propagate": False,
             },
             "uvicorn": {

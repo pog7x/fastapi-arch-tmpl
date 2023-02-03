@@ -1,7 +1,10 @@
+import http
 from typing import List, Optional
 
 from fastapi import APIRouter, Body
 from pydantic import PositiveInt
+from starlette.responses import JSONResponse
+from starlette.status import HTTP_404_NOT_FOUND
 
 from app.core.base_response import BaseResponse
 from app.repository.user_repository import UserRepository
@@ -42,5 +45,12 @@ async def delete_user(user_id: PositiveInt) -> Body:
 @router.put("/{user_id}", response_model=BaseResponse[UserModel])
 async def update_user(user_id: PositiveInt, user: UserModel) -> Body:
     item = await UserRepository().get_by_id(item_id=user_id)
+    if not item:
+        return JSONResponse(
+            content=BaseResponse.from_error_str(
+                http.HTTPStatus(HTTP_404_NOT_FOUND).phrase
+            ).dict(),
+            status_code=HTTP_404_NOT_FOUND,
+        )
     result = await UserRepository().update_object(db_item=item, update_data=user)
     return BaseResponse.from_result(result=result).dict()
