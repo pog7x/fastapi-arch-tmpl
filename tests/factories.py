@@ -40,8 +40,6 @@ class AsyncPersistenceHandler(AsyncPersistenceProtocol[T]):
 class CustomFactory(ModelFactory):
     __faker__ = fake
 
-    id = Ignore()
-
     @classmethod
     def get_provider_map(cls) -> Dict[Any, Callable]:
         provider_map: Dict[Any, Callable] = super().get_provider_map()
@@ -63,9 +61,12 @@ class CoffeeFactory(CustomFactory):
     __model__ = CoffeeModel
     __async_persistence__ = AsyncPersistenceHandler(Coffee)
 
+    id = Ignore()
+
 
 class UserFactory(CustomFactory):
     __model__ = UserModel
     __async_persistence__ = AsyncPersistenceHandler(User)
 
+    id = Ignore()
     coffee_id = Ignore()
