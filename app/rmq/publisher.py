@@ -51,7 +51,10 @@ class RmqPublisher:
 
     async def send_to_rmq(self, data: BaseModel, routing_key: str = "") -> None:
         logger.info(
-            f"Send message to RMQ routing_key: {routing_key} with payload: {data.json().encode()}",
+            (
+                f"Send message to RMQ routing_key: {routing_key} with payload:"
+                f" {data.json().encode()}"
+            ),
         )
         try:
             message = aio_pika.Message(data.json().encode())

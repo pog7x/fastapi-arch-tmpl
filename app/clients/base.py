@@ -51,7 +51,8 @@ class BaseAsyncHttpClient:
     ) -> Response:
         url_path = self._base_url + url
         logger.info(
-            f"{self._client_name} request {method.upper()} {url_path}, params: {params}, body: {json}"
+            f"{self._client_name} request {method.upper()} {url_path}, params:"
+            f" {params}, body: {json}"
         )
         auth = (
             (self._auth_log, self._auth_pass)
@@ -71,7 +72,10 @@ class BaseAsyncHttpClient:
                 auth=auth,
             )
         except Exception as e:
-            msg = f"Unexpected server error {e} from {self._client_name}, endpoint {endpoint}"
+            msg = (
+                f"Unexpected server error {e} from {self._client_name}, endpoint"
+                f" {endpoint}"
+            )
             logger.exception(msg)
             raise HTTPServerException(exc=e, message=msg)
 
@@ -89,7 +93,10 @@ class BaseAsyncHttpClient:
         try:
             raw_data = response.json()
         except JSONDecodeError as e:
-            msg = f"Can't decode response from {self._client_name}:{response.content.decode()}"
+            msg = (
+                "Can't decode response from"
+                f" {self._client_name}:{response.content.decode()}"
+            )
             logger.info(msg)
             raise HTTPServerException(exc=e, message=msg)
 
@@ -104,49 +111,50 @@ class BaseAsyncHttpClient:
             )
             raise HTTPServerException(
                 exc=e,
-                message=f"Can't validate json response from {self._client_name}:{raw_data}",
+                message=(
+                    f"Can't validate json response from {self._client_name}:{raw_data}"
+                ),
             )
 
         return target
 
-
     async def _send_base_request(
-            self,
-            method: str,
-            url: str,
-            params: QueryParams = None,
-            json: Optional[Any] = None,
-            content: Optional[Any] = None,
-            headers: Optional[Dict[str, str]] = None,
-            files: Optional[Dict[str, FileContent]] = None,
-            auth: Tuple[str, str] = USE_CLIENT_DEFAULT,
-        ) -> Response:
-            resp = Response(status_code=500)
+        self,
+        method: str,
+        url: str,
+        params: QueryParams = None,
+        json: Optional[Any] = None,
+        content: Optional[Any] = None,
+        headers: Optional[Dict[str, str]] = None,
+        files: Optional[Dict[str, FileContent]] = None,
+        auth: Tuple[str, str] = USE_CLIENT_DEFAULT,
+    ) -> Response:
+        resp = Response(status_code=500)
 
-            async with AsyncClient(
-                transport=AsyncHTTPTransport(retries=self._retries),
-                follow_redirects=True,
-            ) as client:
-                for retry in reversed(range(self._retries)):
-                    resp = await client.request(
-                        method=method,
-                        url=url,
-                        params=params,
-                        json=json,
-                        content=content,
-                        headers=headers,
-                        timeout=self._timeout,
-                        files=files,
-                        auth=auth,
-                    )
-                    if not (500 <= resp.status_code <= 599):
-                        return resp
+        async with AsyncClient(
+            transport=AsyncHTTPTransport(retries=self._retries),
+            follow_redirects=True,
+        ) as client:
+            for retry in reversed(range(self._retries)):
+                resp = await client.request(
+                    method=method,
+                    url=url,
+                    params=params,
+                    json=json,
+                    content=content,
+                    headers=headers,
+                    timeout=self._timeout,
+                    files=files,
+                    auth=auth,
+                )
+                if not (500 <= resp.status_code <= 599):
+                    return resp
 
-                    if retry:
-                        await asyncio.sleep(self._retry_delay)
-                        continue
+                if retry:
+                    await asyncio.sleep(self._retry_delay)
+                    continue
 
-            return resp
+        return resp
 
     def _handle_http_not_ok_status_code(
         self, resp: Response, skip_error_statuses: Iterable
@@ -156,7 +164,10 @@ class BaseAsyncHttpClient:
             400 <= resp_status_code <= 499
             and resp_status_code not in skip_error_statuses
         ):
-            msg = f"Status code {resp_status_code} response from {self._client_name}:{resp.content.decode()}"
+            msg = (
+                f"Status code {resp_status_code} response from"
+                f" {self._client_name}:{resp.content.decode()}"
+            )
             logger.info(msg)
             raise HTTPClientException(code=resp_status_code, message=msg)
 
@@ -165,7 +176,10 @@ class BaseAsyncHttpClient:
             and resp_status_code not in skip_error_statuses
         ):
             raise HTTPServerException(
-                message=f"Unexpected server error from {self._client_name} with status code {resp_status_code}"
+                message=(
+                    f"Unexpected server error from {self._client_name} with status code"
+                    f" {resp_status_code}"
+                )
             )
 
 
