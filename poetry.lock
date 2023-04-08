@@ -1,4 +1,16 @@
 [[package]]
+name = "aio-pika"
+version = "9.0.5"
+description = "Wrapper around the aiormq for asyncio and humans"
+category = "main"
+optional = false
+python-versions = ">=3.7,<4.0"
+
+[package.dependencies]
+aiormq = ">=6.7.1,<6.8.0"
+yarl = "*"
+
+[[package]]
 name = "aiohttp"
 version = "3.8.4"
 description = "Async http client/server framework (asyncio)"
@@ -17,6 +29,18 @@ yarl = ">=1.0,<2.0"
 
 [package.extras]
 speedups = ["aiodns", "brotli", "cchardet"]
+
+[[package]]
+name = "aiormq"
+version = "6.7.4"
+description = "Pure python AMQP asynchronous client library"
+category = "main"
+optional = false
+python-versions = ">=3.7,<4.0"
+
+[package.dependencies]
+pamqp = "3.2.1"
+yarl = "*"
 
 [[package]]
 name = "aiosignal"
@@ -191,7 +215,7 @@ python-versions = "!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*,!=3.4.*,!=3.5.*,!=3.6.*,>=2.7
 
 [[package]]
 name = "coverage"
-version = "7.2.2"
+version = "7.2.3"
 description = "Code coverage measurement for Python"
 category = "dev"
 optional = false
@@ -440,6 +464,18 @@ description = "Core utilities for Python packages"
 category = "dev"
 optional = false
 python-versions = ">=3.7"
+
+[[package]]
+name = "pamqp"
+version = "3.2.1"
+description = "RabbitMQ Focused AMQP low-level library"
+category = "main"
+optional = false
+python-versions = ">=3.7"
+
+[package.extras]
+codegen = ["lxml", "requests", "yapf"]
+testing = ["coverage", "flake8", "flake8-comprehensions", "flake8-deprecated", "flake8-import-order", "flake8-print", "flake8-quotes", "flake8-rst-docstrings", "flake8-tuple", "yapf"]
 
 [[package]]
 name = "pathspec"
@@ -699,10 +735,12 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.10"
-content-hash = "49e6dddc4bcf2ff6910f8b7088250c51d4e924181dbc89aec818c8810ec3e469"
+content-hash = "9337d71ecbec69bcaecd24b6fb953c6f93aa42d681541f9becee2da4ec42c7ad"
 
 [metadata.files]
+aio-pika = []
 aiohttp = []
+aiormq = []
 aiosignal = []
 alembic = []
 anyio = []
@@ -738,6 +776,7 @@ multidict = []
 mypy = []
 mypy-extensions = []
 packaging = []
+pamqp = []
 pathspec = []
 platformdirs = []
 pluggy = []
