@@ -46,3 +46,8 @@ def event_loop():
     yield loop
     loop.close()
     asyncio.set_event_loop(asyncio.new_event_loop())
+
+
+@pytest.fixture
+def base_url() -> str:
+    return "http://base.url/test"

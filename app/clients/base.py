@@ -184,7 +184,7 @@ class BaseAsyncHttpClient:
 
 
 class BaseHTTPException(Exception):
-    def init(self, exc: Optional[Exception] = None, message: Optional[str] = None):
+    def __init__(self, exc: Optional[Exception] = None, message: Optional[str] = None):
         self.exc: Exception = exc
         self.message: str = message
 
@@ -194,8 +194,8 @@ class HTTPServerException(BaseHTTPException):
 
 
 class HTTPClientException(BaseHTTPException):
-    def init(
+    def __init__(
         self, code: int, exc: Optional[Exception] = None, message: Optional[str] = None
     ):
-        super(HTTPClientException, self).init(exc=exc, message=message)
+        super().__init__(exc=exc, message=message)
         self.code = code

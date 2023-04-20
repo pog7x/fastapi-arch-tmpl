@@ -510,6 +510,23 @@ dev = ["pre-commit", "tox"]
 testing = ["pytest", "pytest-benchmark"]
 
 [[package]]
+name = "polyfactory"
+version = "2.0.0"
+description = "Mock data generation factories"
+category = "dev"
+optional = false
+python-versions = ">=3.8,<4.0"
+
+[package.dependencies]
+faker = "*"
+typing-extensions = "*"
+
+[package.extras]
+beanie = ["beanie", "pydantic"]
+odmantic = ["odmantic", "pydantic"]
+pydantic = ["pydantic"]
+
+[[package]]
 name = "pycodestyle"
 version = "2.7.0"
 description = "Python style guide checker"
@@ -599,6 +616,17 @@ python-versions = "!=3.0.*,!=3.1.*,!=3.2.*,>=2.7"
 
 [package.dependencies]
 six = ">=1.5"
+
+[[package]]
+name = "respx"
+version = "0.20.1"
+description = "A utility for mocking out the Python HTTPX and HTTP Core libraries."
+category = "dev"
+optional = false
+python-versions = ">=3.7"
+
+[package.dependencies]
+httpx = ">=0.21.0"
 
 [[package]]
 name = "rfc3986"
@@ -735,7 +763,7 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.10"
-content-hash = "9337d71ecbec69bcaecd24b6fb953c6f93aa42d681541f9becee2da4ec42c7ad"
+content-hash = "b448552abd379bd1fa3e33e965cdd49fb9c3e268da00f2d1d1196fb023a3db28"
 
 [metadata.files]
 aio-pika = []
@@ -780,6 +808,7 @@ pamqp = []
 pathspec = []
 platformdirs = []
 pluggy = []
+polyfactory = []
 pycodestyle = []
 pydantic = []
 pyflakes = []
@@ -787,6 +816,7 @@ pytest = []
 pytest-asyncio = []
 pytest-cov = []
 python-dateutil = []
+respx = []
 rfc3986 = []
 six = []
 sniffio = []

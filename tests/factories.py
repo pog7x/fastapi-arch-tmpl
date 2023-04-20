@@ -1,9 +1,9 @@
-from collections import deque
-from typing import Any, Callable, Dict, List, TypeVar
+from typing import List, TypeVar
 
 from faker import Faker
+from polyfactory import AsyncPersistenceProtocol, Ignore
+from polyfactory.factories.pydantic_factory import ModelFactory
 from pydantic import BaseModel
-from pydantic_factories import AsyncPersistenceProtocol, Ignore, ModelFactory
 
 from app.core.session import async_session
 from app.models.coffee import Coffee
@@ -30,41 +30,23 @@ class AsyncPersistenceHandler(AsyncPersistenceProtocol[T]):
             return data
 
         async with async_session.begin() as session:
-            for item in data:
-                item = self._model_class(**data.dict())
+            for data_item in data:
+                item = self._model_class(**data_item.dict())
                 session.add(item)
 
             return data
 
 
-class CustomFactory(ModelFactory):
+class CoffeeFactory(ModelFactory):
     __faker__ = fake
-
-    @classmethod
-    def get_provider_map(cls) -> Dict[Any, Callable]:
-        provider_map: Dict[Any, Callable] = super().get_provider_map()
-        faker: Faker = cls.get_faker()
-        provider_map.update(
-            {
-                dict: lambda: faker.pydict(value_types=["str"]),
-                tuple: lambda: faker.pytuple(value_types=["str"]),
-                list: lambda: faker.pylist(value_types=["str"]),
-                set: lambda: faker.pyset(value_types=["str"]),
-                frozenset: lambda: frozenset(faker.pylist(value_types=["str"])),
-                deque: lambda: deque(faker.pylist(value_types=["str"])),
-            }
-        )
-        return provider_map
-
-
-class CoffeeFactory(CustomFactory):
     __model__ = CoffeeModel
     __async_persistence__ = AsyncPersistenceHandler(Coffee)
 
     id = Ignore()
 
 
-class UserFactory(CustomFactory):
+class UserFactory(ModelFactory):
+    __faker__ = fake
     __model__ = UserModel
     __async_persistence__ = AsyncPersistenceHandler(User)
 

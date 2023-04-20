@@ -30,6 +30,8 @@ factory-boy = "^3.2.1"
 Faker = "^13.3.4"
 asgi-lifespan = "^1.0.1"
 mypy = "^0.920"
+polyfactory = "^2.0.0"
+respx = "^0.20.1"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
