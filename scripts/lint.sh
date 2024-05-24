@@ -2,6 +2,6 @@
 
 set -xue
 
-autoflake --check --recursive --exclude venv,migrations --quiet .
+autoflake --check .
 black --check --diff .
 isort --check-only .
