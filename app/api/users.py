@@ -7,30 +7,30 @@ from starlette.responses import JSONResponse
 from starlette.status import HTTP_404_NOT_FOUND
 
 from app.core.base_response import BaseResponse
+from app.models.user import User
 from app.repository.user_repository import UserRepository
-from app.schemas import UserModel, UserWithCoffeeModel
 
 router = APIRouter()
 
 
-@router.get("/", response_model=BaseResponse[List[UserWithCoffeeModel]])
+@router.get("/", response_model=BaseResponse[List[User]])
 async def search_users(
     name: Optional[str] = None, surname: Optional[str] = None
 ) -> Body:
     result = await UserRepository().search_objects(
-        UserModel(name=name, surname=surname).dict(exclude_none=True),
+        User(name=name, surname=surname).model_dump(exclude_none=True),
         join_related=["coffee"],
     )
     return BaseResponse.from_result(result=result).dict()
 
 
-@router.post("/", response_model=BaseResponse[UserModel])
-async def create_user(user: UserModel) -> Body:
+@router.post("/", response_model=BaseResponse[User])
+async def create_user(user: User) -> Body:
     result = await UserRepository().create_object(create_data=user)
     return BaseResponse.from_result(result=result).dict()
 
 
-@router.get("/{user_id}", response_model=BaseResponse[UserWithCoffeeModel])
+@router.get("/{user_id}", response_model=BaseResponse[User])
 async def get_user(user_id: PositiveInt) -> Body:
     result = await UserRepository().get_by_id(item_id=user_id, join_related=["coffee"])
     return BaseResponse.from_result(result=result).dict()
@@ -42,8 +42,8 @@ async def delete_user(user_id: PositiveInt) -> Body:
     return BaseResponse.from_result(result=result).dict()
 
 
-@router.put("/{user_id}", response_model=BaseResponse[UserModel])
-async def update_user(user_id: PositiveInt, user: UserModel) -> Body:
+@router.put("/{user_id}", response_model=BaseResponse[User])
+async def update_user(user_id: PositiveInt, user: User) -> Body:
     item = await UserRepository().get_by_id(item_id=user_id)
     if not item:
         return JSONResponse(

@@ -1,28 +1,34 @@
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Optional
+from uuid import UUID
 
-from sqlalchemy import Column, ForeignKey, Integer, String
+from pydantic import EmailStr
+from sqlalchemy import Column, String
 from sqlalchemy.dialects import postgresql
-from sqlalchemy.orm import relationship
+from sqlmodel import Field, Relationship
 
 from app.models.base import Base
 
 if TYPE_CHECKING:
-    from .coffee import Coffee  # noqa: F401
+    from app.models.coffee import Coffee  # noqa: F401
 
 
-class User(Base):
-    id = Column(Integer, primary_key=True, index=True)
-    uid = Column(postgresql.UUID(as_uuid=True), nullable=True)
-    password = Column(String(50), nullable=True)
-    first_name = Column(String(50), nullable=True)
-    last_name = Column(String(50), nullable=True)
-    username = Column(String(50), nullable=True)
-    email = Column(String, nullable=True)
-    gender = Column(String(50), nullable=True)
-    phone_number = Column(String(50), nullable=True)
-    social_insurance_number = Column(String(50), nullable=True)
-    date_of_birth = Column(String(50), nullable=True)
-    employment = Column(postgresql.JSONB, nullable=True)
-    address = Column(postgresql.JSONB, nullable=True)
-    coffee_id = Column(Integer, ForeignKey("coffee.id"))
-    coffee = relationship("Coffee", back_populates="users")
+class User(Base, table=True):
+    id: int = Field(primary_key=True, index=True)
+    uid: UUID | None = Field(
+        sa_column=(Column(postgresql.UUID(as_uuid=True), nullable=True))
+    )
+    password: str | None = Field(sa_column=(Column(String(50), nullable=True)))
+    first_name: str | None = Field(sa_column=(Column(String(50), nullable=True)))
+    last_name: str | None = Field(sa_column=(Column(String(50), nullable=True)))
+    username: str | None = Field(sa_column=(Column(String(50), nullable=True)))
+    email: EmailStr | None = Field(sa_column=(Column(String, nullable=True)))
+    gender: str | None = Field(sa_column=(Column(String(50), nullable=True)))
+    phone_number: str | None = Field(sa_column=(Column(String(50), nullable=True)))
+    social_insurance_number: str | None = Field(
+        sa_column=(Column(String(50), nullable=True))
+    )
+    date_of_birth: str | None = Field(sa_column=(Column(String(50), nullable=True)))
+    employment: dict | None = Field(sa_column=(Column(postgresql.JSONB, nullable=True)))
+    address: dict | None = Field(sa_column=(Column(postgresql.JSONB, nullable=True)))
+    coffee_id: int | None = Field(default=None, foreign_key="coffee.id")
+    coffee: Optional["Coffee"] | None = Relationship(back_populates="users")

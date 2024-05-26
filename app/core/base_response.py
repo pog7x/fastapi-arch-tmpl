@@ -1,7 +1,6 @@
 from typing import Any, Generic, List, Optional, TypeVar, Union
 
 from pydantic import BaseModel
-from pydantic.generics import GenericModel
 
 T = TypeVar("T")
 
@@ -11,13 +10,13 @@ class BaseError(BaseModel):
     detail: Optional[str] = None
 
 
-class BaseResponse(GenericModel, Generic[T]):
+class BaseResponse(BaseModel, Generic[T]):
     result: Optional[T] = None
     errors: Optional[List[Union[BaseError, dict]]] = []
     success: Optional[bool] = None
 
     def dict(self, *args: Any, **kwargs: Any) -> dict:
-        d = super().dict(*args, **kwargs)
+        d = super().model_dump(*args, **kwargs)
         d["success"] = not self.errors
         return d
 

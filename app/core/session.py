@@ -17,7 +17,8 @@ class WithAsyncSessionMixin:
         raise NotImplementedError
 
     def __call__(self, func):
-        """Decorate function, produce new transaction,
+        """
+        Decorate function, produce new transaction,
         create and pass session to arguments
 
         e.g.::
@@ -52,7 +53,8 @@ class WithAsyncSessionmaker(WithAsyncSessionMixin):
         self._session_maker = session_maker
 
     def begin_(self):
-        """Produce a context manager that both provides a new
+        """
+        Produce a context manager that both provides a new
         :class:`AsyncSession` as well as a transaction that commits.
 
         e.g.::
@@ -69,7 +71,8 @@ class WithAsyncSessionmaker(WithAsyncSessionMixin):
 
 class WithAsyncSession(AsyncSession, WithAsyncSessionMixin):
     def begin_(self):
-        """Produce a context manager that both provides a new
+        """
+        Produce a context manager that both provides a new
         :class:`AsyncSession` as well as a transaction that commits.
 
         Easy to replace with session from `WithAsyncSessionmaker`.

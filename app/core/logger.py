@@ -59,7 +59,7 @@ class BaseJSONLogSchema(BaseModel):
     parent_id: Optional[str] = None
 
     class Config:
-        allow_population_by_field_name = True
+        populate_by_name = True
 
 
 class JSONLogFormatter(logging.Formatter):

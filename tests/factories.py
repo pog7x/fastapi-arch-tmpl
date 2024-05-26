@@ -8,7 +8,6 @@ from pydantic import BaseModel
 from app.core.session import async_session
 from app.models.coffee import Coffee
 from app.models.user import User
-from app.schemas import CoffeeModel, UserModel
 
 fake = Faker()
 
@@ -39,7 +38,7 @@ class AsyncPersistenceHandler(AsyncPersistenceProtocol[T]):
 
 class CoffeeFactory(ModelFactory):
     __faker__ = fake
-    __model__ = CoffeeModel
+    __model__ = Coffee
     __async_persistence__ = AsyncPersistenceHandler(Coffee)
 
     id = Ignore()
@@ -47,7 +46,7 @@ class CoffeeFactory(ModelFactory):
 
 class UserFactory(ModelFactory):
     __faker__ = fake
-    __model__ = UserModel
+    __model__ = User
     __async_persistence__ = AsyncPersistenceHandler(User)
 
     id = Ignore()

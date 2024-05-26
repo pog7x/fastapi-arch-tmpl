@@ -1,4 +1,4 @@
-from pydantic import HttpUrl, PostgresDsn, field_validator, ValidationInfo
+from pydantic import HttpUrl, PostgresDsn, ValidationInfo, field_validator
 from pydantic_settings import BaseSettings
 
 

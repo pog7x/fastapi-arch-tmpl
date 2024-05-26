@@ -7,28 +7,28 @@ from starlette.responses import JSONResponse
 from starlette.status import HTTP_404_NOT_FOUND
 
 from app.core.base_response import BaseResponse
+from app.models.coffee import Coffee
 from app.repository.coffee_repository import CoffeeRepository
-from app.schemas import CoffeeModel, CoffeeWithUsersModel
 
 router = APIRouter()
 
 
-@router.post("/", response_model=BaseResponse[CoffeeModel])
-async def create_coffee(coffee: CoffeeModel) -> Body:
+@router.post("/", response_model=BaseResponse[Coffee])
+async def create_coffee(coffee: Coffee) -> Body:
     result = await CoffeeRepository().create_object(create_data=coffee)
     return BaseResponse.from_result(result=result).dict()
 
 
-@router.get("/", response_model=BaseResponse[List[CoffeeWithUsersModel]])
+@router.get("/", response_model=BaseResponse[List[Coffee]])
 async def search_coffee() -> Body:
     result = await CoffeeRepository().search_objects(
-        CoffeeModel().dict(exclude_none=True),
+        Coffee().model_dump(exclude_none=True),
         join_related=["users"],
     )
     return BaseResponse.from_result(result=result).dict()
 
 
-@router.get("/{coffee_id}", response_model=BaseResponse[CoffeeWithUsersModel])
+@router.get("/{coffee_id}", response_model=BaseResponse[Coffee])
 async def get_coffee(coffee_id: PositiveInt) -> Body:
     result = await CoffeeRepository().get_by_id(
         item_id=coffee_id, join_related=["users"]
@@ -42,8 +42,8 @@ async def delete_coffee(coffee_id: PositiveInt) -> Body:
     return BaseResponse.from_result(result=result).dict()
 
 
-@router.put("/{coffee_id}", response_model=BaseResponse[CoffeeModel])
-async def update_coffee(coffee_id: PositiveInt, coffee: CoffeeModel) -> Body:
+@router.put("/{coffee_id}", response_model=BaseResponse[Coffee])
+async def update_coffee(coffee_id: PositiveInt, coffee: Coffee) -> Body:
     item = await CoffeeRepository().get_by_id(item_id=coffee_id)
     if not item:
         return JSONResponse(
