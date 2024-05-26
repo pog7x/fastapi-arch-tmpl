@@ -20,7 +20,7 @@ class AsyncPersistenceHandler(AsyncPersistenceProtocol[T]):
 
     async def save(self, data: T) -> T:
         async with async_session.begin() as session:
-            item = self._model_class(**data.dict())
+            item = self._model_class(**data.model_dump())
             session.add(item)
             return item
 
@@ -30,7 +30,7 @@ class AsyncPersistenceHandler(AsyncPersistenceProtocol[T]):
 
         async with async_session.begin() as session:
             for data_item in data:
-                item = self._model_class(**data_item.dict())
+                item = self._model_class(**data_item.model_dump())
                 session.add(item)
 
             return data

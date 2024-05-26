@@ -89,5 +89,5 @@ class WithAsyncSession(AsyncSession, WithAsyncSessionMixin):
         return self._maker_context_manager()
 
 
-s = sessionmaker(bind=engine, expire_on_commit=False, class_=AsyncSession)
-with_session = WithAsyncSessionmaker(session_maker=s)
+_sessionmaker = sessionmaker(bind=engine, expire_on_commit=False, class_=AsyncSession)
+with_session = WithAsyncSessionmaker(session_maker=_sessionmaker)

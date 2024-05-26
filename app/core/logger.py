@@ -69,12 +69,7 @@ class JSONLogFormatter(logging.Formatter):
 
     @staticmethod
     def _format_log_object(record: logging.LogRecord) -> Dict:
-        now = (
-            datetime.datetime.fromtimestamp(record.created)
-            .astimezone()
-            .replace(microsecond=0)
-            .isoformat()
-        )
+        now = datetime.datetime.fromtimestamp(record.created).astimezone().replace(microsecond=0).isoformat()
         json_log_fields = BaseJSONLogSchema(
             timestamp=now,
             level_name=logging.getLevelName(record.levelno),
@@ -91,9 +86,7 @@ class JSONLogFormatter(logging.Formatter):
         elif record.exc_text:
             json_log_fields.exceptions = record.exc_text
 
-        json_log_object = json_log_fields.dict(
-            exclude_unset=True,
-        )
+        json_log_object = json_log_fields.model_dump(exclude_unset=True)
         if hasattr(record, "request_json_fields"):
             json_log_object.update(record.request_json_fields)  # type: ignore
 

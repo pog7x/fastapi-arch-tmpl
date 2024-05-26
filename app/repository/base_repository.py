@@ -41,9 +41,7 @@ class BaseRepository:
             if jr in self._relationships:
                 qs = qs.options(joinedload(getattr(self.model_cls, jr)))
 
-        res = await session.execute(
-            qs.order_by(self.model_cls.id).limit(limit).offset(offset)
-        )
+        res = await session.execute(qs.order_by(self.model_cls.id).limit(limit).offset(offset))
 
         if join_related:
             return res.scalars().unique().all()
@@ -71,7 +69,7 @@ class BaseRepository:
         create_data: CreateSchemaType,
         session: Optional[AsyncSession] = None,
     ) -> ModelType:
-        new_item = self.model_cls(**create_data.dict())
+        new_item = self.model_cls(**create_data.model_dump())
         session.add(new_item)
         return new_item
 
@@ -85,7 +83,7 @@ class BaseRepository:
         if isinstance(update_data, dict):
             obj_in = update_data
         else:
-            obj_in = update_data.dict(exclude_unset=True)
+            obj_in = update_data.model_dump(exclude_unset=True)
 
         for field in obj_in:
             if field in self._model_fields:
