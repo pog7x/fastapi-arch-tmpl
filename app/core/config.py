@@ -1,6 +1,5 @@
-from typing import Any, Dict, Optional
-
-from pydantic import BaseSettings, HttpUrl, PostgresDsn, validator
+from pydantic import HttpUrl, PostgresDsn, field_validator, ValidationInfo
+from pydantic_settings import BaseSettings
 
 
 class Settings(BaseSettings):
@@ -13,7 +12,7 @@ class Settings(BaseSettings):
     PROJECT_NAME: str
     PROJECT_VERSION: str = "0.0.1"
     ROOT_URL: str = ""
-    SENTRY_DSN: Optional[HttpUrl] = None
+    SENTRY_DSN: HttpUrl | None = None
 
     DISABLE_DOCS: bool = False
     OPENAPI_URL: str = "/openapi.json"
@@ -22,21 +21,23 @@ class Settings(BaseSettings):
     POSTGRES_USER: str
     POSTGRES_PASSWORD: str
     POSTGRES_HOST: str
-    POSTGRES_PORT: str
+    POSTGRES_PORT: int
     POSTGRES_DB: str
-    POSTGRES_DATABASE_URI: Optional[PostgresDsn] = None
+    POSTGRES_DATABASE_URI: str | None = None
 
-    @validator("POSTGRES_DATABASE_URI", pre=True)
-    def assemble_db_connection(cls, v: Optional[str], values: Dict[str, Any]) -> Any:
+    @field_validator("POSTGRES_DATABASE_URI", mode="before")
+    def assemble_db_connection(cls, v: str | None, info: ValidationInfo) -> str:
         if isinstance(v, str):
             return v
-        return PostgresDsn.build(
-            scheme="postgresql+asyncpg",
-            user=values.get("POSTGRES_USER"),
-            password=values.get("POSTGRES_PASSWORD"),
-            host=values.get("POSTGRES_HOST"),
-            port=values.get("POSTGRES_PORT"),
-            path=f"/{values.get('POSTGRES_DB')}",
+        return str(
+            PostgresDsn.build(
+                scheme="postgresql+asyncpg",
+                username=info.data.get("POSTGRES_USER"),
+                password=info.data.get("POSTGRES_PASSWORD"),
+                host=info.data.get("POSTGRES_HOST"),
+                port=info.data.get("POSTGRES_PORT"),
+                path=info.data.get("POSTGRES_DB"),
+            )
         )
 
     class Config:
