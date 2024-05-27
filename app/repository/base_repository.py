@@ -41,7 +41,9 @@ class BaseRepository:
             if jr in self._relationships:
                 qs = qs.options(joinedload(getattr(self.model_cls, jr)))
 
-        res = await session.execute(qs.order_by(self.model_cls.id).limit(limit).offset(offset))
+        res = await session.execute(
+            qs.order_by(self.model_cls.id).limit(limit).offset(offset)
+        )
 
         if join_related:
             return res.scalars().unique().all()

@@ -1,5 +1,5 @@
 import http
-from typing import List, Optional
+from typing import List
 
 from fastapi import APIRouter, Body
 from pydantic import PositiveInt
@@ -14,9 +14,7 @@ router = APIRouter()
 
 
 @router.get("/", response_model=BaseResponse[List[User]])
-async def search_users(
-    name: Optional[str] = None, surname: Optional[str] = None
-) -> Body:
+async def search_users(name: str | None = None, surname: str | None = None) -> Body:
     result = await UserRepository().search_objects(
         User(name=name, surname=surname).model_dump(exclude_none=True),
         join_related=["coffee"],

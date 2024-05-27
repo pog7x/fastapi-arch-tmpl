@@ -13,7 +13,9 @@ if TYPE_CHECKING:
 
 class User(Base, table=True):
     id: int = Field(primary_key=True, index=True)
-    uid: UUID | None = Field(sa_column=(Column(postgresql.UUID(as_uuid=True), nullable=True)))
+    uid: UUID | None = Field(
+        sa_column=(Column(postgresql.UUID(as_uuid=True), nullable=True))
+    )
     password: str | None = Field(sa_column=(Column(String(50), nullable=True)))
     first_name: str | None = Field(sa_column=(Column(String(50), nullable=True)))
     last_name: str | None = Field(sa_column=(Column(String(50), nullable=True)))
@@ -21,7 +23,9 @@ class User(Base, table=True):
     email: str | None = Field(sa_column=(Column(String, nullable=True)))
     gender: str | None = Field(sa_column=(Column(String(50), nullable=True)))
     phone_number: str | None = Field(sa_column=(Column(String(50), nullable=True)))
-    social_insurance_number: str | None = Field(sa_column=(Column(String(50), nullable=True)))
+    social_insurance_number: str | None = Field(
+        sa_column=(Column(String(50), nullable=True))
+    )
     date_of_birth: str | None = Field(sa_column=(Column(String(50), nullable=True)))
     employment: dict | None = Field(sa_column=(Column(postgresql.JSONB, nullable=True)))
     address: dict | None = Field(sa_column=(Column(postgresql.JSONB, nullable=True)))

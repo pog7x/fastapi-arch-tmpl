@@ -69,7 +69,12 @@ class JSONLogFormatter(logging.Formatter):
 
     @staticmethod
     def _format_log_object(record: logging.LogRecord) -> Dict:
-        now = datetime.datetime.fromtimestamp(record.created).astimezone().replace(microsecond=0).isoformat()
+        now = (
+            datetime.datetime.fromtimestamp(record.created)
+            .astimezone()
+            .replace(microsecond=0)
+            .isoformat()
+        )
         json_log_fields = BaseJSONLogSchema(
             timestamp=now,
             level_name=logging.getLevelName(record.levelno),
