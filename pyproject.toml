@@ -39,9 +39,14 @@ requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.pytest.ini_options]
+required_plugins = [
+    "pytest-asyncio",
+    "pytest-cov",
+]
 addopts = "--cov=app --cov-report term-missing -v"
 testpaths = ["tests"]
 markers = ["fast: run tests without extra dependencies"]
+filterwarnings = ["ignore::DeprecationWarning", "ignore::UserWarning"]
 asyncio_mode = "auto"
 
 [tool.isort]

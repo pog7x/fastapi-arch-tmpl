@@ -1,14 +1,13 @@
 import asyncio
-from typing import AsyncGenerator
+from typing import AsyncIterator, Iterator
 
 import pytest
-from asgi_lifespan import LifespanManager
 from fastapi import FastAPI
-from httpx import AsyncClient, ASGITransport
+from httpx import ASGITransport, AsyncClient
 
 
 @pytest.fixture(scope="session", autouse=True)
-async def engine():
+async def engine(event_loop):
     from app.core.session import engine
     from app.models import Base
 
@@ -30,22 +29,20 @@ def application() -> FastAPI:
 
 
 @pytest.fixture(scope="session")
-async def http_client(application: FastAPI) -> AsyncGenerator[AsyncClient, None]:
-    async with LifespanManager(application):
-        async with AsyncClient(
-            transport=ASGITransport(app=application),
-            base_url="http://testserver",
-            headers={"Content-Type": "application/json"},
-        ) as client:
-            yield client
+async def http_client(application: FastAPI) -> AsyncIterator[AsyncClient]:
+    async with AsyncClient(
+        transport=ASGITransport(app=application),
+        base_url="http://testserver",
+        headers={"Content-Type": "application/json"},
+    ) as client:
+        yield client
 
 
 @pytest.fixture(scope="session")
-def event_loop():
-    loop = asyncio.get_event_loop()
+def event_loop(request: "pytest.FixtureRequest") -> Iterator[asyncio.AbstractEventLoop]:
+    loop = asyncio.get_event_loop_policy().new_event_loop()
     yield loop
     loop.close()
-    asyncio.set_event_loop(asyncio.new_event_loop())
 
 
 @pytest.fixture

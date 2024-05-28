@@ -1,6 +1,7 @@
 import pytest
-from tests.factories import CoffeeFactory
 from httpx import AsyncClient
+
+from tests.factories import CoffeeFactory
 
 
 class TestCoffeeAPI:
