@@ -13,9 +13,7 @@ class TestUserRepository:
     @pytest.mark.asyncio
     async def test_search_objects(self):
         expected_size = 15
-        obj_dict = self.factory.build().model_dump(
-            exclude_none=True, exclude={"address", "employment"}
-        )
+        obj_dict = self.factory.build().model_dump(exclude={"address", "employment"})
 
         await self.factory.create_batch_async(size=expected_size, **obj_dict)
 
@@ -26,47 +24,41 @@ class TestUserRepository:
     @pytest.mark.asyncio
     async def test_get_by_id(self):
         obj_dict = self.factory.build().model_dump()
-
         obj = await self.factory.create_async(**obj_dict)
 
         result = await self.repo.get_by_id(item_id=obj.id)
 
-        assert result.model_dump(exclude={"id"}) == obj_dict
+        assert result.id == obj.id
+        assert result == obj
 
     @pytest.mark.asyncio
     async def test_create_object(self):
-        obj_model: self.model_cls = self.factory.build()
-
+        obj_model = self.factory.build()
         obj = await self.repo.create_object(obj_model)
 
         result = await self.repo.get_by_id(obj.id)
 
-        assert result.model_dump(exclude={"id"}) == obj_model.model_dump()
+        assert result == obj
 
     @pytest.mark.asyncio
     async def test_update_object(self):
         obj_dict = self.factory.build().model_dump()
         update_dict = self.factory.build().model_dump()
         update_model = self.factory.build()
-
         obj = await self.factory.create_async(**obj_dict)
-        assert obj.model_dump(exclude={"id"}) == obj_dict
 
-        result = await self.repo.update_object(obj, update_dict)
-        assert result.model_dump(exclude={"id"}) == update_dict
+        upd = await self.repo.update_object(obj, update_dict)
+        assert upd.model_dump(exclude={"id"}) == update_dict
 
-        result = await self.repo.update_object(obj, update_model)
-        assert result.model_dump(exclude={"id"}) == update_model.model_dump()
+        upd = await self.repo.update_object(upd, update_model)
+        assert upd.model_dump(exclude={"id"}) == update_model.model_dump()
 
     @pytest.mark.asyncio
     async def test_delete_by_id(self):
         obj_dict = self.factory.build().model_dump()
-
         obj = await self.factory.create_async(**obj_dict)
 
-        result = await self.repo.get_by_id(item_id=obj.id)
-        assert result.model_dump(exclude={"id"}) == obj_dict
+        assert await self.repo.get_by_id(item_id=obj.id) == obj
 
         await self.repo.delete_by_id(item_id=obj.id)
-
         assert await self.repo.get_by_id(item_id=obj.id) is None

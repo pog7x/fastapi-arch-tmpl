@@ -4,7 +4,7 @@ import logging
 import traceback
 from typing import Any, Dict, List, Optional, Union
 
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 
 
 def get_log_config(debug: bool) -> Dict:
@@ -58,8 +58,7 @@ class BaseJSONLogSchema(BaseModel):
     span_id: Optional[str] = None
     parent_id: Optional[str] = None
 
-    class Config:
-        populate_by_name = True
+    model_config = ConfigDict(populate_by_name=True)
 
 
 class JSONLogFormatter(logging.Formatter):

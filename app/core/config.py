@@ -1,5 +1,5 @@
 from pydantic import HttpUrl, PostgresDsn, ValidationInfo, field_validator
-from pydantic_settings import BaseSettings
+from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class Settings(BaseSettings):
@@ -40,8 +40,7 @@ class Settings(BaseSettings):
             )
         )
 
-    class Config:
-        case_sensitive = True
+    model_config = SettingsConfigDict(case_sensitive=True)
 
 
 settings = Settings()

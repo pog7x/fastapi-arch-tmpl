@@ -1,10 +1,10 @@
 import asyncio
-from typing import Generator
+from typing import AsyncGenerator
 
 import pytest
 from asgi_lifespan import LifespanManager
 from fastapi import FastAPI
-from httpx import AsyncClient
+from httpx import AsyncClient, ASGITransport
 
 
 @pytest.fixture(scope="session", autouse=True)
@@ -30,10 +30,10 @@ def application() -> FastAPI:
 
 
 @pytest.fixture(scope="session")
-async def client(application: FastAPI) -> Generator:
+async def http_client(application: FastAPI) -> AsyncGenerator[AsyncClient, None]:
     async with LifespanManager(application):
         async with AsyncClient(
-            app=application,
+            transport=ASGITransport(app=application),
             base_url="http://testserver",
             headers={"Content-Type": "application/json"},
         ) as client:
