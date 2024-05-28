@@ -47,6 +47,7 @@ class BaseRepository:
 
         if join_related:
             return res.scalars().unique().all()
+
         return res.scalars().all()
 
     @with_session

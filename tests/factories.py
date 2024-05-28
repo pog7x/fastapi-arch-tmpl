@@ -5,7 +5,7 @@ from polyfactory import AsyncPersistenceProtocol, Ignore
 from polyfactory.factories.pydantic_factory import ModelFactory
 from pydantic import BaseModel
 
-from app.core.session import async_session
+from app.core.session import with_session
 from app.models.coffee import Coffee
 from app.models.user import User
 
@@ -19,20 +19,16 @@ class AsyncPersistenceHandler(AsyncPersistenceProtocol[T]):
         self._model_class = model_class
 
     async def save(self, data: T) -> T:
-        async with async_session.begin() as session:
-            item = self._model_class(**data.model_dump())
-            session.add(item)
-            return item
+        async with with_session.begin_() as session:
+            session.add(data)
+            return data
 
     async def save_many(self, data: List[T]) -> List[T]:
         if len(data) == 0:
             return data
 
-        async with async_session.begin() as session:
-            for data_item in data:
-                item = self._model_class(**data_item.model_dump())
-                session.add(item)
-
+        async with with_session.begin_() as session:
+            session.add_all(data)
             return data
 
 

@@ -1,6 +1,7 @@
 from typing import TYPE_CHECKING, Optional
 from uuid import UUID
 
+from pydantic import Json
 from sqlalchemy import Column, String
 from sqlalchemy.dialects import postgresql
 from sqlmodel import Field, Relationship
@@ -27,7 +28,7 @@ class User(Base, table=True):
         sa_column=(Column(String(50), nullable=True))
     )
     date_of_birth: str | None = Field(sa_column=(Column(String(50), nullable=True)))
-    employment: dict | None = Field(sa_column=(Column(postgresql.JSONB, nullable=True)))
-    address: dict | None = Field(sa_column=(Column(postgresql.JSONB, nullable=True)))
+    employment: Json | None = Field(sa_column=(Column(postgresql.JSONB, nullable=True)))
+    address: Json | None = Field(sa_column=(Column(postgresql.JSONB, nullable=True)))
     coffee_id: int | None = Field(default=None, foreign_key="coffee.id")
     coffee: Optional["Coffee"] | None = Relationship(back_populates="users")
