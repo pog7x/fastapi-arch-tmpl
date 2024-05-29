@@ -26,4 +26,4 @@ ${CMD} up -d --build
 
 clear_pytest
 
-${CMD} exec -T app pytest -vvs && clear_pytest
+${CMD} exec -T app pytest && clear_pytest
