@@ -16,6 +16,7 @@ class TestCoffeeRepository:
         obj_dict = self.factory.build().model_dump()
 
         await self.factory.create_batch_async(size=expected_size, **obj_dict)
+        await self.factory.create_batch_async(size=expected_size)
 
         result = await self.repo.search_objects(obj_dict)
 

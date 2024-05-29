@@ -1,4 +1,4 @@
-from typing import Any, Container, Dict, List, Optional, TypeVar, Union
+from typing import Any, Dict, Iterable, List, Optional, TypeVar, Union
 
 from pydantic import BaseModel, NonNegativeInt, PositiveInt
 from sqlalchemy import inspect
@@ -28,7 +28,7 @@ class BaseRepository:
         search_data: Dict,
         limit: PositiveInt = 20,
         offset: NonNegativeInt = 0,
-        join_related: Container[str] = [],
+        join_related: Iterable[str] = (),
         session: Optional[AsyncSession] = None,
     ) -> List[ModelType]:
         qs = select(self.model_cls)
@@ -54,7 +54,7 @@ class BaseRepository:
     async def get_by_id(
         self,
         item_id: PositiveInt,
-        join_related: Container[str] = [],
+        join_related: Iterable[str] = (),
         session: Optional[AsyncSession] = None,
     ) -> ModelType:
         qs = select(self.model_cls).filter_by(id=item_id)

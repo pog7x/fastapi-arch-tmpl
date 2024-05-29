@@ -16,7 +16,7 @@ class Coffee(Base, table=True):
     uid: UUID | None = Field(
         sa_column=Column(postgresql.UUID(as_uuid=True), nullable=True)
     )
-    blend_name: str | None = Field(sa_column=Column(String(200), nullable=True))
+    blend_name: str = Field(sa_column=Column(String(200)))
     origin: str | None = Field(sa_column=Column(String(200), nullable=True))
     variety: str | None = Field(sa_column=Column(String(50), nullable=True))
     notes: list[str] | None = Field(

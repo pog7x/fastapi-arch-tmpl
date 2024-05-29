@@ -18,7 +18,7 @@ class User(Base, table=True):
         sa_column=(Column(postgresql.UUID(as_uuid=True), nullable=True))
     )
     password: str | None = Field(sa_column=(Column(String(50), nullable=True)))
-    first_name: str | None = Field(sa_column=(Column(String(50), nullable=True)))
+    first_name: str = Field(sa_column=(Column(String(50))))
     last_name: str | None = Field(sa_column=(Column(String(50), nullable=True)))
     username: str | None = Field(sa_column=(Column(String(50), nullable=True)))
     email: str | None = Field(sa_column=(Column(String, nullable=True)))

@@ -4,6 +4,7 @@ from fastapi import FastAPI
 from fastapi.exceptions import RequestValidationError
 from starlette.exceptions import HTTPException as StarletteHTTPException
 from starlette.status import HTTP_500_INTERNAL_SERVER_ERROR
+from starlette.types import ASGIApp
 
 from app.api.routes import router
 from app.core.config import settings
@@ -16,7 +17,7 @@ from app.core.logger import get_log_config
 
 
 class ApplicationFactory:
-    def __call__(self) -> FastAPI:
+    def __call__(self) -> ASGIApp:
         dictConfig(get_log_config(settings.DEBUG))
         application = FastAPI(
             title=settings.PROJECT_NAME,

@@ -14,9 +14,13 @@ router = APIRouter()
 
 
 @router.get("/", response_model=BaseResponse[List[User]])
-async def search_users(name: str | None = None, surname: str | None = None) -> Body:
+async def search_users(
+    first_name: str | None = None, last_name: str | None = None
+) -> Body:
     result = await UserRepository().search_objects(
-        User(name=name, surname=surname).model_dump(exclude_none=True),
+        User(first_name=first_name or None, last_name=last_name or None).model_dump(
+            exclude_none=True
+        ),
         join_related=["coffee"],
     )
     return BaseResponse.from_result(result=result).dict()

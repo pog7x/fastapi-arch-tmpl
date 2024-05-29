@@ -1,12 +1,12 @@
-import asyncio
-from typing import AsyncIterator, Iterator
+from typing import Any, AsyncIterator, Awaitable
 
 import pytest
-from fastapi import FastAPI
 from httpx import ASGITransport, AsyncClient
 
+TestApp = Awaitable[dict[str, Any]], (dict[str, Any])
 
-@pytest.fixture(scope="session", autouse=True)
+
+@pytest.fixture(scope="function", autouse=True)
 async def engine(event_loop):
     from app.core.session import engine
     from app.models import Base
@@ -22,27 +22,20 @@ async def engine(event_loop):
 
 
 @pytest.fixture(scope="session")
-def application() -> FastAPI:
+def application() -> TestApp:
     from app.main import app_factory
 
     return app_factory()
 
 
 @pytest.fixture(scope="session")
-async def http_client(application: FastAPI) -> AsyncIterator[AsyncClient]:
+async def http_client(application: TestApp) -> AsyncIterator[AsyncClient]:
     async with AsyncClient(
         transport=ASGITransport(app=application),
         base_url="http://testserver",
         headers={"Content-Type": "application/json"},
     ) as client:
         yield client
-
-
-@pytest.fixture(scope="session")
-def event_loop(request: "pytest.FixtureRequest") -> Iterator[asyncio.AbstractEventLoop]:
-    loop = asyncio.get_event_loop_policy().new_event_loop()
-    yield loop
-    loop.close()
 
 
 @pytest.fixture
