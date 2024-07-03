@@ -2,13 +2,13 @@
 
 [[package]]
 name = "aio-pika"
-version = "9.4.1"
+version = "9.4.2"
 description = "Wrapper around the aiormq for asyncio and humans"
 optional = false
-python-versions = ">=3.8,<4.0"
+python-versions = "<4.0,>=3.8"
 files = [
-    {file = "aio_pika-9.4.1-py3-none-any.whl", hash = "sha256:2d4cec5a5d32005a71e31faaf5be58ee993fa29b8243a5d04b8f4a73df272fe8"},
-    {file = "aio_pika-9.4.1.tar.gz", hash = "sha256:d177404a27aa797a2ac935f6aa2bbb287fe1f0ddf5628ca20a237b7db3ea6324"},
+    {file = "aio_pika-9.4.2-py3-none-any.whl", hash = "sha256:22e5fa27d10a3817dd24c031cc477953aaf7c3be5f4f25d2582a55ec229adc4c"},
+    {file = "aio_pika-9.4.2.tar.gz", hash = "sha256:d1217dc28d09be9dff96c06cdf2e82c92599a34f154e8932bf35373157f3424d"},
 ]
 
 [package.dependencies]
@@ -1865,17 +1865,6 @@ typing-extensions = ">=3.7.4.3"
 
 [[package]]
 name = "typing-extensions"
-version = "4.12.0"
-description = "Backported and Experimental Type Hints for Python 3.8+"
-optional = false
-python-versions = ">=3.8"
-files = [
-    {file = "typing_extensions-4.12.0-py3-none-any.whl", hash = "sha256:b349c66bea9016ac22978d800cfff206d5f9816951f12a7d0ec5578b0a819594"},
-    {file = "typing_extensions-4.12.0.tar.gz", hash = "sha256:8cbcdc8606ebcb0d95453ad7dc5065e6237b6aa230a31e81d0f440c30fed5fd8"},
-]
-
-[[package]]
-name = "typing-extensions"
 version = "4.12.2"
 description = "Backported and Experimental Type Hints for Python 3.8+"
 optional = false
@@ -2315,4 +2304,4 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.12"
-content-hash = "8353831810fd66b201b53edcad45d51d9a5c8178444f2a01856ee185e186e620"
+content-hash = "764942120b582772700dbec64ac756f21694e287c82e1f585b9f4f2325ab8f55"
