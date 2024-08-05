@@ -3,7 +3,7 @@
 set -xue
 
 COMPOSE_FILE="docker-compose.test.yml"
-CMD="docker-compose -f ${COMPOSE_FILE}"
+CMD="docker compose -f ${COMPOSE_FILE}"
 
 function docker_compose_down() {
     if [[ $? -ne 0 ]]; then
