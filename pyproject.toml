@@ -16,7 +16,7 @@ pydantic-settings = "^2.4.0"
 pydantic = "^2.8.2"
 alembic = "^1.13.2"
 httpx = "^0.27.2"
-sqlmodel = "^0.0.21"
+sqlmodel = "^0.0.22"
 
 [tool.poetry.dev-dependencies]
 pytest = "^8.3.2"
