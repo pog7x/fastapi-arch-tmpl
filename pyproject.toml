@@ -14,7 +14,7 @@ fastapi = "^0.115.11"
 uvicorn = "^0.34.0"
 pydantic-settings = "^2.8.0"
 pydantic = "^2.10.6"
-alembic = "^1.14.1"
+alembic = "^1.15.1"
 httpx = "^0.28.1"
 sqlmodel = "^0.0.23"
 
