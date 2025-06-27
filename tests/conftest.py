@@ -7,7 +7,7 @@ TestApp = Awaitable[dict[str, Any]], (dict[str, Any])
 
 
 @pytest.fixture(scope="function", autouse=True)
-async def engine(event_loop):
+async def engine():
     from app.core.session import engine
     from app.models import Base
 
