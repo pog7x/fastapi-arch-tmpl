@@ -30,7 +30,7 @@ pytest-asyncio = "^1.1.0"
 factory-boy = "^3.3.3"
 Faker = "^37.4.2"
 asgi-lifespan = "^2.1.0"
-mypy = "^1.16"
+mypy = "^1.17"
 polyfactory = "^2.22.1"
 respx = "^0.22.0"
 
