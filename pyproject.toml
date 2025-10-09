@@ -16,7 +16,7 @@ pydantic-settings = "^2.11.0"
 pydantic = "^2.11.10"
 alembic = "^1.16.5"
 httpx = "^0.28.1"
-sqlmodel = "^0.0.25"
+sqlmodel = "^0.0.27"
 greenlet = "^3.2.4"
 
 [tool.poetry.group.dev.dependencies]
