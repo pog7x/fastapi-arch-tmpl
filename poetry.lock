@@ -603,14 +603,14 @@ tzdata = "*"
 
 [[package]]
 name = "fastapi"
-version = "0.120.4"
+version = "0.121.0"
 description = "FastAPI framework, high performance, easy to learn, fast to code, ready for production"
 optional = false
 python-versions = ">=3.8"
 groups = ["main"]
 files = [
-    {file = "fastapi-0.120.4-py3-none-any.whl", hash = "sha256:9bdf192308676480d3593e10fd05094e56d6fdc7d9283db26053d8104d5f82a0"},
-    {file = "fastapi-0.120.4.tar.gz", hash = "sha256:2d856bc847893ca4d77896d4504ffdec0fb04312b705065fca9104428eca3868"},
+    {file = "fastapi-0.121.0-py3-none-any.whl", hash = "sha256:8bdf1b15a55f4e4b0d6201033da9109ea15632cb76cf156e7b8b4019f2172106"},
+    {file = "fastapi-0.121.0.tar.gz", hash = "sha256:06663356a0b1ee93e875bbf05a31fb22314f5bed455afaaad2b2dad7f26e98fa"},
 ]
 
 [package.dependencies]
@@ -2012,4 +2012,4 @@ propcache = ">=0.2.0"
 [metadata]
 lock-version = "2.1"
 python-versions = "^3.13"
-content-hash = "130c7470b78463a5d7734168841c3e368a04c245fa967d3bf72e182e6a0f0637"
+content-hash = "64c8430ad0445f3f1addfdc17e551809cb1b7fd13fe4ab4bd987f6218d9aba7b"
