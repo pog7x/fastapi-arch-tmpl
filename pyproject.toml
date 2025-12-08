@@ -20,7 +20,7 @@ sqlmodel = "^0.0.27"
 greenlet = "^3.3.0"
 
 [tool.poetry.group.dev.dependencies]
-pytest = "^9.0.1"
+pytest = "^9.0.2"
 pytest-cov = "7.0.0"
 black = "^25.11.0"
 isort = "^7.0.0"
