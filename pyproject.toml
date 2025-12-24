@@ -32,7 +32,7 @@ factory-boy = "^3.3.3"
 Faker = "^39.0.0"
 asgi-lifespan = "^2.1.0"
 mypy = "^1.19"
-polyfactory = "^3.1.0"
+polyfactory = "^3.2.0"
 respx = "^0.22.0"
 
 [build-system]
