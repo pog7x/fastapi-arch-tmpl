@@ -7,7 +7,7 @@ authors = ["pog7x <poluningm@gmail.com>"]
 [tool.poetry.dependencies]
 python = "^3.13"
 asyncpg = "^0.31.0"
-aiohttp = "^3.13.2"
+aiohttp = "^3.13.3"
 aio-pika = "^9.5.8"
 SQLAlchemy = "^2.0.45"
 uvicorn = "^0.40.0"
