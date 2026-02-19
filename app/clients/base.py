@@ -1,5 +1,6 @@
 import asyncio
 import logging
+from http import HTTPStatus
 from json import JSONDecodeError
 from typing import IO, Any, Dict, Iterable, Optional, Tuple
 
@@ -104,10 +105,7 @@ class BaseAsyncHttpClient:
             target = target_cls(**raw_data)
         except ValidationError as e:
             logger.info(
-                "Can't validate json response from %s:%s - %s",
-                self._client_name,
-                raw_data,
-                e.json(),
+                f"Can't validate json response from {self._client_name}:{raw_data} - {e.json()}"
             )
             raise HTTPServerException(
                 exc=e,
@@ -129,7 +127,7 @@ class BaseAsyncHttpClient:
         files: Optional[Dict[str, FileContent]] = None,
         auth: Tuple[str, str] = USE_CLIENT_DEFAULT,
     ) -> Response:
-        resp = Response(status_code=500)
+        resp = Response(status_code=HTTPStatus.INTERNAL_SERVER_ERROR)
 
         async with AsyncClient(
             transport=AsyncHTTPTransport(retries=self._retries),
@@ -147,7 +145,7 @@ class BaseAsyncHttpClient:
                     files=files,
                     auth=auth,
                 )
-                if not (500 <= resp.status_code <= 599):
+                if not HTTPStatus(resp.status_code).is_server_error:
                     return resp
 
                 if retry:
@@ -161,7 +159,7 @@ class BaseAsyncHttpClient:
     ) -> None:
         resp_status_code = resp.status_code
         if (
-            400 <= resp_status_code <= 499
+            HTTPStatus(resp_status_code).is_client_error
             and resp_status_code not in skip_error_statuses
         ):
             msg = (
@@ -172,7 +170,7 @@ class BaseAsyncHttpClient:
             raise HTTPClientException(code=resp_status_code, message=msg)
 
         if (
-            500 <= resp_status_code <= 599
+            HTTPStatus(resp_status_code).is_server_error
             and resp_status_code not in skip_error_statuses
         ):
             raise HTTPServerException(
