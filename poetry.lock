@@ -1351,14 +1351,14 @@ testing = ["pytest", "pytest-benchmark"]
 
 [[package]]
 name = "polyfactory"
-version = "3.2.0"
+version = "3.3.0"
 description = "Mock data generation factories"
 optional = false
 python-versions = "<4.0,>=3.9"
 groups = ["dev"]
 files = [
-    {file = "polyfactory-3.2.0-py3-none-any.whl", hash = "sha256:5945799cce4c56cd44ccad96fb0352996914553cc3efaa5a286930599f569571"},
-    {file = "polyfactory-3.2.0.tar.gz", hash = "sha256:879242f55208f023eee1de48522de5cb1f9fd2d09b2314e999a9592829d596d1"},
+    {file = "polyfactory-3.3.0-py3-none-any.whl", hash = "sha256:686abcaa761930d3df87b91e95b26b8d8cb9fdbbbe0b03d5f918acff5c72606e"},
+    {file = "polyfactory-3.3.0.tar.gz", hash = "sha256:237258b6ff43edf362ffd1f68086bb796466f786adfa002b0ac256dbf2246e9a"},
 ]
 
 [package.dependencies]
@@ -2126,4 +2126,4 @@ propcache = ">=0.2.0"
 [metadata]
 lock-version = "2.1"
 python-versions = "^3.13"
-content-hash = "9ea2c49f748d34405fd54817f44285902a57fa5c5bcd63207e42261298cab790"
+content-hash = "992ee06d176b66b21803f22e4290a4ed5a6552605ff685950bb6cbd714a9dee9"
