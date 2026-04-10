@@ -1834,14 +1834,14 @@ dev = ["black", "build", "mypy", "pytest", "pytest-cov", "setuptools", "tox", "t
 
 [[package]]
 name = "respx"
-version = "0.22.0"
+version = "0.23.0"
 description = "A utility for mocking out the Python HTTPX and HTTP Core libraries."
 optional = false
 python-versions = ">=3.8"
 groups = ["dev"]
 files = [
-    {file = "respx-0.22.0-py2.py3-none-any.whl", hash = "sha256:631128d4c9aba15e56903fb5f66fb1eff412ce28dd387ca3a81339e52dbd3ad0"},
-    {file = "respx-0.22.0.tar.gz", hash = "sha256:3c8924caa2a50bd71aefc07aa812f2466ff489f1848c96e954a5362d17095d91"},
+    {file = "respx-0.23.0-py2.py3-none-any.whl", hash = "sha256:7c5be720f91849cd015b1cb9c45cea3cb98ea36614fc570c4a658f5102adfa5d"},
+    {file = "respx-0.23.0.tar.gz", hash = "sha256:501540d8df8ff77f95d895a59cdcde7ad7db6c359cb22ca4ff51de72d0fc6f51"},
 ]
 
 [package.dependencies]
@@ -2171,4 +2171,4 @@ propcache = ">=0.2.0"
 [metadata]
 lock-version = "2.1"
 python-versions = "^3.13"
-content-hash = "05e15b8996ce60c18231171bf1df8e270bb4ae9107864c93ad966903f34c95f0"
+content-hash = "87991a853e1c82a760447a1f013c3512c8713346fa82f5cb56ccaa5d52c488ca"
