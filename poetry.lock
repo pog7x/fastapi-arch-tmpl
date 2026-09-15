@@ -202,19 +202,19 @@ frozenlist = ">=1.1.0"
 
 [[package]]
 name = "alembic"
-version = "1.19.2"
+version = "1.20.0"
 description = "A database migration tool for SQLAlchemy."
 optional = false
 python-versions = ">=3.10"
 groups = ["main"]
 files = [
-    {file = "alembic-1.19.2-py3-none-any.whl", hash = "sha256:32d553dcd577e6fe5c3c63e91468526d35e4dcecafe865d7db4e9b328fa93cb2"},
-    {file = "alembic-1.19.2.tar.gz", hash = "sha256:297950a8a91f6770eb82bfbce9bea55c728b90a5386c6e81430191a319d138b0"},
+    {file = "alembic-1.20.0-py3-none-any.whl", hash = "sha256:77eb101048d95f982c0353e9233404889dcd7a6fc244c107836c0e2fc9cf7d9d"},
+    {file = "alembic-1.20.0.tar.gz", hash = "sha256:db505480647bc60386c5369402f4a57a506b7539c9e9ef5e270d45cbbe4939bf"},
 ]
 
 [package.dependencies]
 Mako = "*"
-SQLAlchemy = ">=1.4.23"
+SQLAlchemy = ">=2.0"
 typing-extensions = ">=4.12"
 
 [package.extras]
@@ -2300,4 +2300,4 @@ propcache = ">=0.2.0"
 [metadata]
 lock-version = "2.1"
 python-versions = "^3.13"
-content-hash = "39999e0aa75b3a1faa9c7d13c1156d527a79f169da921e7026a700027c07b764"
+content-hash = "b5779343a97bcf043d2f5866134e794539a15b25c8ab240b4713a2c2f35af657"
