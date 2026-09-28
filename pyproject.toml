@@ -17,7 +17,7 @@ pydantic = "^2.13.5"
 alembic = "^1.20.0"
 httpx = "^0.28.1"
 sqlmodel = "^0.0.45"
-greenlet = "^3.5.5"
+greenlet = "^3.5.6"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^9.1.1"
