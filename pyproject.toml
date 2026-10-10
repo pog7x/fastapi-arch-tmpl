@@ -22,7 +22,7 @@ greenlet = "^3.5.6"
 [tool.poetry.group.dev.dependencies]
 pytest = "^9.1.1"
 pytest-cov = "7.1.0"
-black = "^26.5.1"
+black = "^26.10.0"
 isort = "^9.0.2"
 autoflake = "^2.4.0"
 flake8 = "^7.4.1"
