@@ -2,14 +2,14 @@
 
 [[package]]
 name = "aio-pika"
-version = "10.2.0"
+version = "10.2.1"
 description = "Wrapper around the aiormq for asyncio and humans"
 optional = false
 python-versions = "<4,>=3.11"
 groups = ["main"]
 files = [
-    {file = "aio_pika-10.2.0-py3-none-any.whl", hash = "sha256:9900eef4060463a2e3ae30ad5c12e17e211c215e83e0953a33d5ee2462d4a7e6"},
-    {file = "aio_pika-10.2.0.tar.gz", hash = "sha256:9356026de1751b0631f27db45b2fb80290ebb6ec7a3e69a075f357b5f478d459"},
+    {file = "aio_pika-10.2.1-py3-none-any.whl", hash = "sha256:66c85d311e30f1dd3e28109d686c9bf1d9dd1a74582004c7cb7bed284d8fe3b1"},
+    {file = "aio_pika-10.2.1.tar.gz", hash = "sha256:e4f77afd9179a3cca5a904c3b0a1190256a36d9f90650db908b1b2245eb27487"},
 ]
 
 [package.dependencies]
@@ -2547,4 +2547,4 @@ propcache = ">=0.2.1"
 [metadata]
 lock-version = "2.1"
 python-versions = "^3.13"
-content-hash = "5a94ebc394a337ff4c90d1e933e78251280684f8e10db1fa8cffa29792ed6a34"
+content-hash = "7cb3dd8eb38decf7e1caf145ba78265b8213eaa9b9d1d3373444e0c5f4bd23ec"
